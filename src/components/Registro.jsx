@@ -112,119 +112,128 @@ export const Registro = () => {
     
     </div>
   
-<h1 className='text-black text-center mt-2'>Registro del ciudadano</h1>
+<h1 className=' text-center mt-2 titulo'>Registro del ciudadano</h1>
         
         
         
 
-        <Container className="mt-2 pt-3 main mb-3 pb-3">
+        <Container fluid >
 
-      <Row className='justify-content-between'>
+      <Row className='justify-content-center ' >
+     <Col xs={4} className='mt-2 pt-3 main mb-3 pb-3'>
      
+     <Form onSubmit={handleRegister} className='m-1 p-3 '>
+
+<Form.Group className="mb-3 " controlId="nombre">
+    <Form.Label> <strong>Nombre</strong> </Form.Label>
+    <Form.Control
+      type="text"
+      placeholder="Juan Perez"
+      name='nombre_ciudadano'
+      onChange={(e) => setNombre(e.target.value)}
+      maxLength={50}
+      required
+    />
+  </Form.Group>
+
+  <Form.Group className="mb-3" controlId="email">
+    <Form.Label> <strong>Email address</strong> </Form.Label>
+    <Form.Control
+      type="email"
+      placeholder="name@example.com"
+      name="email_ciudadano"
+      onChange={(e) => setEmail(e.target.value)}
+      maxLength={70}
+      required
+    />
+  </Form.Group>
+
+  <Form.Group className="mb-3" controlId="telefono">
+    <Form.Label> <strong>Telefono</strong> </Form.Label>
+    <Form.Control
+      type="number"
+      placeholder="4223456"
+      name="telefono_ciudadano"
+      onChange={(e) => setTelefono(e.target.value)}
+      maxLength={15}
+      required
+    />
+  </Form.Group>
+
+  <Form.Group className="mb-3" controlId="celular">
+    <Form.Label> <strong>Celular</strong> </Form.Label>
+    <Form.Control
+      type="number"
+      placeholder="3813456789"
+      name="celular_ciudadano"
+      onChange={(e) => setCelular(e.target.value)}
+      maxLength={15}
+      required
+    />
+  </Form.Group>
+
+  <Form.Group className="mb-3" controlId="contraseña">
+    <Form.Label> <strong>Contraseña</strong> </Form.Label>
+    <Form.Control
+      type="password"
+      placeholder='Escriba una contraseña'
+      name="clave_ciudadano"
+      onChange={(e) => setContraseña(e.target.value)}
+      minLength={8}
+      maxLength={15}
+      required
+    />
+  </Form.Group>
+
+  <Form.Group className="mb-3" controlId="confirmarContraseña">
+    <Form.Label> <strong>Confirmar Contraseña</strong> </Form.Label>
+    <Form.Control
+      type="password"
+      placeholder='Repetir contraseña'
+      onChange={(e) => setConfirmarContraseña(e.target.value)}
+      minLength={8}
+      maxLength={15}
+      required
+    />
+  </Form.Group>
+
+  <Form.Group className="mb-3" controlId="dni">
+    <Form.Label> <strong>DNI</strong> </Form.Label>
+    <Form.Control
+      type="number"
+      placeholder='16234568'
+      onChange={(e) => setDni(e.target.value)}
+      name="dni_ciudadano"
+      maxLength={10}
+      required
+    />
+  </Form.Group>
+
+  <Form.Group className="mb-3" controlId="domicilio">
+    <Form.Label> <strong> Domicilio</strong></Form.Label>
+    <Form.Control
+      type="text"
+      placeholder='Mendoza 345'
+      onChange={(e) => setDomicilio(e.target.value)}
+      name="domicilio"
+      maxLength={100}
+      required
+    />
+  </Form.Group>
+
+  <div className='className="d-grid gap-2"'>
+  <Button size='lg' variant="primary" type="submit" className="w-100">
+ Enviar
+</Button>
+  </div>
+  
+
+  </Form>
+     
+     
+     </Col>
        
-          <Form onSubmit={handleRegister} className='m-1 p-3 '>
-
-          <Form.Group className="mb-3 " controlId="nombre">
-              <Form.Label>Nombre</Form.Label>
-              <Form.Control
-                type="text"
-                placeholder="Juan Perez"
-                name='nombre_ciudadano'
-                onChange={(e) => setNombre(e.target.value)}
-                maxLength={50}
-                required
-              />
-            </Form.Group>
-
-            <Form.Group className="mb-3" controlId="email">
-              <Form.Label>Email address</Form.Label>
-              <Form.Control
-                type="email"
-                placeholder="name@example.com"
-                name="email_ciudadano"
-                onChange={(e) => setEmail(e.target.value)}
-                maxLength={70}
-                required
-              />
-            </Form.Group>
-
-            <Form.Group className="mb-3" controlId="telefono">
-              <Form.Label>Telefono</Form.Label>
-              <Form.Control
-                type="number"
-                placeholder="4223456"
-                name="telefono_ciudadano"
-                onChange={(e) => setTelefono(e.target.value)}
-                maxLength={15}
-                required
-              />
-            </Form.Group>
-
-            <Form.Group className="mb-3" controlId="celular">
-              <Form.Label>celular</Form.Label>
-              <Form.Control
-                type="number"
-                placeholder="3813456789"
-                name="celular_ciudadano"
-                onChange={(e) => setCelular(e.target.value)}
-                maxLength={15}
-                required
-              />
-            </Form.Group>
-
-            <Form.Group className="mb-3" controlId="contraseña">
-              <Form.Label>Contraseña</Form.Label>
-              <Form.Control
-                type="password"
-                placeholder='Escriba una contraseña'
-                name="clave_ciudadano"
-                onChange={(e) => setContraseña(e.target.value)}
-                minLength={8}
-                maxLength={15}
-                required
-              />
-            </Form.Group>
-
-            <Form.Group className="mb-3" controlId="confirmarContraseña">
-              <Form.Label>Confirmar Contraseña</Form.Label>
-              <Form.Control
-                type="password"
-                placeholder='Repetir contraseña'
-                onChange={(e) => setConfirmarContraseña(e.target.value)}
-                minLength={8}
-                maxLength={15}
-                required
-              />
-            </Form.Group>
-
-            <Form.Group className="mb-3" controlId="dni">
-              <Form.Label> DNI</Form.Label>
-              <Form.Control
-                type="number"
-                placeholder='16234568'
-                onChange={(e) => setDni(e.target.value)}
-                name="dni_ciudadano"
-                maxLength={10}
-                required
-              />
-            </Form.Group>
-
-            <Form.Group className="mb-3" controlId="domicilio">
-              <Form.Label> Domicilio</Form.Label>
-              <Form.Control
-                type="text"
-                placeholder='Mendoza 345'
-                onChange={(e) => setDomicilio(e.target.value)}
-                name="domicilio"
-                maxLength={100}
-                required
-              />
-            </Form.Group>
-            
-            <Button variant="outline-primary" type="submit">
-           <h6>Enviar</h6> 
-          </Button>
-            </Form>
+      
     
        
       </Row>
