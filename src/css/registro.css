@@ -1,0 +1,24 @@
+:root {
+    --rojo: #655aff;
+    --negro: #252525;
+    --amarillo: #81fc87;
+  }
+  .main {
+  
+    background-color:rgb(246, 246, 246);
+  }
+.banner{
+  background-color: #655aff;
+}
+
+.logo{
+  width: 150px;
+  
+}
+
+.logo2{
+  width: 300px;
+}
+.logo3{
+  width: 250px;
+}
