@@ -1,13 +1,13 @@
 import React, { useState } from 'react'
-
 import '../css/registro.css';
 import Swal from 'sweetalert2';
 import { Button, Col, Container, Form, Row } from 'react-bootstrap';
-//import reactToMyPizzaAPI from '../../../api/ReactToMyPizzaAPI';
 //import { Navigate } from 'react-router';
 import logo from '../assets/Logo_Muni200x200.png';
 import logo2 from '../assets/logo_municipalidad.png';
 import logo3 from '../assets/logomuni_piedepagina.png';
+import { FaEye, FaEyeSlash } from "react-icons/fa";
+
 
 export const Registro = () => {
    
@@ -29,8 +29,20 @@ export const Registro = () => {
       habilita:""
     })
    
+    const [showPassword, setShowPassword] = useState(false);
+    const [showPassword2, setShowPassword2] = useState(false);
+   
+
+    const handleTogglePassword = () => {
+      setShowPassword(!showPassword);
+    };
+    const handleTogglePassword2 = () => {
+      setShowPassword2(!showPassword2);
+    };
+
     const handleRegister = async (e)=>{
-        e.preventDefault();
+      e.preventDefault();
+     
         
         // Validaciones
         // ! Verificar que no haya campos vacios
@@ -108,7 +120,7 @@ if( formData.id_localidad == 0){
   Swal.fire({
     position: "center",
     icon: "success",
-    title: "El formulario de registro se envió correctamente, le enviaremos un email de validación para finalizar el registro",
+    title: `Registro exitoso!, le enviaremos un email de validación a ${formData.email_ciudadano} `,
     showConfirmButton: false,
     timer: 2500
   });
@@ -205,10 +217,12 @@ else{
         <Container fluid >
 
       <Row className='justify-content-center ' >
-     <Col xs={4} className='mt-2 pt-3 main mb-3 pb-3'>
+     <Col xs={8} className='mt-2 pt-3 main mb-3 pb-3'>
      
-     <Form onSubmit={handleRegister} className='m-1 p-3 '>
+     <Form  onSubmit={handleRegister} className='m-1 p-3 '>
 
+      <Row>
+<Col>
 <Form.Group className="mb-3 " controlId="nombre">
     <Form.Label> <strong>Nombre</strong> </Form.Label>
     <Form.Control
@@ -221,6 +235,7 @@ else{
       required
       value={formData.nombre_ciudadano}
     />
+     
   </Form.Group>
 
   <Form.Group className="mb-3" controlId="email">
@@ -261,10 +276,10 @@ else{
     />
   </Form.Group>
 
-  <Form.Group className="mb-3" controlId="contraseña">
-    <Form.Label> <strong>Clave</strong> </Form.Label>
+ <Form.Group className="mb-3 d-flex flex-column" controlId="contraseña">
+  <Form.Label> <strong>Clave</strong> </Form.Label>
     <Form.Control
-      type="password"
+     type={showPassword ? 'text' : 'password'}
       placeholder='Escriba una clave'
       name="clave_ciudadano"
       onChange={handleChange}
@@ -273,18 +288,51 @@ else{
       maxLength={15}
       required
     />
-  </Form.Group>
+  <div className="d-flex justify-content-end">
+  {showPassword ? (
+          <FaEyeSlash
+            onClick={handleTogglePassword}
+            className='ojo'
+            
+          />
+        ) : (
+          <FaEye
+            onClick={handleTogglePassword}
+            className='ojo'
+            
+          />
+        )}
+  </div>
+</Form.Group>
 
-  <Form.Group className="mb-3" controlId="confirmarContraseña">
+</Col>
+
+<Col>
+<Form.Group className=" d-flex flex-column" controlId="confirmarContraseña">
     <Form.Label> <strong>Confirmar Clave</strong> </Form.Label>
     <Form.Control
-      type="password"
+      type={showPassword2 ? 'text' : 'password'}
       placeholder='Repetir clave'
       onChange={(e) => setConfirmarContraseña(e.target.value)}
       minLength={15}
       maxLength={15}
       required
     />
+     <div className="d-flex justify-content-end">
+  {showPassword2 ? (
+          <FaEyeSlash
+            onClick={handleTogglePassword2}
+            className='ojo'
+            
+          />
+        ) : (
+          <FaEye
+            onClick={handleTogglePassword2}
+            className='ojo'
+            
+          />
+        )}
+  </div>
   </Form.Group>
 
   <Form.Group className="mb-3" controlId="dni">
@@ -298,6 +346,9 @@ else{
       required
       
     />
+ 
+
+
   </Form.Group>
 
   <Form.Group className="mb-3" controlId="domicilio">
@@ -334,7 +385,7 @@ else{
   </Form.Group>
 
   <Form.Group className="mb-3" controlId="dni">
-    <Form.Label> <strong>Provincia</strong> </Form.Label>
+    <Form.Label> <strong>Localidad</strong> </Form.Label>
     
  <Form.Select 
  type="number"    
@@ -352,33 +403,36 @@ else{
       
     </Form.Select>
   </Form.Group>
+</Col>
 
- 
+      </Row>
 
-  <div className='className="d-grid gap-2"'>
-  <Button size='lg' variant="primary" type="submit" className="w-100">
+<Row>
+<Col className='text-center mt-2'>
+<div className='className="d-grid gap-2"'>
+  <Button size='lg' variant="primary" type="submit" className="w-50">
  Enviar
 </Button>
   </div>
-  
 
+</Col>
+
+</Row>
+
+ 
   </Form>
-     
-     
-     </Col>
-       
       
-    
-       
+     </Col>
+         
       </Row>
     </Container>
 
 
 
-<footer className='banner'>
+<footer className='footer'>
   <div className='text-center'>
 
-  <img src={logo3} alt="Logo 1" className='logo3 p-2' />
+  <img src={logo2} alt="Logo 1" className='logo3 p-2' />
   </div>
 
 </footer>
