@@ -7,6 +7,7 @@ import logo from '../assets/Logo_Muni200x200.png';
 import logo2 from '../assets/logo_municipalidad.png';
 import logo3 from '../assets/logomuni_piedepagina.png';
 import { FaEye, FaEyeSlash } from "react-icons/fa";
+import emailjs from '@emailjs/browser';
 
 
 export const Registro = () => {
@@ -24,7 +25,7 @@ export const Registro = () => {
       domicilio:"",
       id_provincia:"",
       id_localidad:"",
-      validado:"",
+      validado:false,
       fecha_carga:"",
       habilita:""
     })
@@ -42,8 +43,8 @@ export const Registro = () => {
 
     const handleRegister = async (e)=>{
       e.preventDefault();
-     
-        
+  
+
         // Validaciones
         // ! Verificar que no haya campos vacios
         // if(nombre.trim() === '' || telefono === ''  || dni === ''  || domicilio === ''  || celular === '' || email.trim() === '' || contraseña.trim() === '' || confirmarContraseña.trim() === ''){ 
@@ -112,11 +113,31 @@ if( formData.id_localidad == 0){
 }
 
 
-  setFormData({
-    ...formData,
-    fecha_carga: new Date().toLocaleString(),
+
+const codigo = Math.floor(1000 + Math.random() * 9000);
+const templateParams = {
+ 
+  to_email:formData.email_ciudadano,
+  to_name:formData.nombre_ciudadano,
+  message:codigo
+};
+setFormData({
+  ...formData,
+
+  codVerif: codigo,
+  fecha_carga: new Date().toLocaleString(),
 });
-  console.log(formData)
+
+emailjs.send('service_bup50ma','template_82f6vmm', templateParams, 'FsfYHHi918Ht3OErb')
+	.then((response) => {
+	   console.log('SUCCESS!', response.status, response.text);
+	}, (err) => {
+	   console.log('FAILED...', err);
+	});
+
+
+
+  
   Swal.fire({
     position: "center",
     icon: "success",
@@ -124,7 +145,7 @@ if( formData.id_localidad == 0){
     showConfirmButton: false,
     timer: 2500
   });
-
+  console.log(formData)
      
         // ! Creo usuario en la base de datos
 
@@ -184,13 +205,22 @@ if(e.target.type=="number")
   setFormData({
     ...formData,
     [e.target.name]: e.target.value.slice(0,lon),
+    
 });
+// setFormData({
+//   ...formData,
+//   fecha_carga: new Date().toLocaleString(),
+// });
 }
 else{
   setFormData({
     ...formData,
     [e.target.name]: e.target.value,
+    
 });
+
+
+
 }
      
        }
@@ -224,7 +254,7 @@ else{
       <Row>
 <Col>
 <Form.Group className="mb-3 " controlId="nombre">
-    <Form.Label> <strong>Nombre</strong> </Form.Label>
+    <Form.Label> <strong>Nombre y Apellido</strong> </Form.Label>
     <Form.Control
       type="text"
       placeholder="Juan Perez"
@@ -275,8 +305,28 @@ else{
       required
     />
   </Form.Group>
+  <Form.Group className="mb-3" controlId="dni">
+    <Form.Label> <strong>DNI</strong> </Form.Label>
+    <Form.Control
+      type="number"
+      placeholder='16234568'
+      onChange={(e)=>handleChange(e,8)}
+      value={formData.dni_ciudadano}
+      name="dni_ciudadano"
+      required
+      
+    />
+ 
 
- <Form.Group className="mb-3 d-flex flex-column" controlId="contraseña">
+
+  </Form.Group>
+
+
+
+</Col>
+
+<Col>
+<Form.Group className=" d-flex flex-column" controlId="clave">
   <Form.Label> <strong>Clave</strong> </Form.Label>
     <Form.Control
      type={showPassword ? 'text' : 'password'}
@@ -305,10 +355,7 @@ else{
   </div>
 </Form.Group>
 
-</Col>
-
-<Col>
-<Form.Group className=" d-flex flex-column" controlId="confirmarContraseña">
+<Form.Group className=" d-flex flex-column" controlId="confirmarClave">
     <Form.Label> <strong>Confirmar Clave</strong> </Form.Label>
     <Form.Control
       type={showPassword2 ? 'text' : 'password'}
@@ -335,21 +382,7 @@ else{
   </div>
   </Form.Group>
 
-  <Form.Group className="mb-3" controlId="dni">
-    <Form.Label> <strong>DNI</strong> </Form.Label>
-    <Form.Control
-      type="number"
-      placeholder='16234568'
-      onChange={(e)=>handleChange(e,8)}
-      value={formData.dni_ciudadano}
-      name="dni_ciudadano"
-      required
-      
-    />
  
-
-
-  </Form.Group>
 
   <Form.Group className="mb-3" controlId="domicilio">
     <Form.Label> <strong> Domicilio</strong></Form.Label>
@@ -359,12 +392,12 @@ else{
       onChange={handleChange}
       value={formData.domicilio}
       name="domicilio"
-      maxLength={100}
+      maxLength={30}
       required
     />
   </Form.Group>
 
-  <Form.Group className="mb-3" controlId="dni">
+  <Form.Group className="mb-3" controlId="Provincia">
     <Form.Label> <strong>Provincia</strong> </Form.Label>
     
  <Form.Select 
@@ -384,7 +417,7 @@ else{
     </Form.Select>
   </Form.Group>
 
-  <Form.Group className="mb-3" controlId="dni">
+  <Form.Group className="mb-3" controlId="Localidad">
     <Form.Label> <strong>Localidad</strong> </Form.Label>
     
  <Form.Select 
