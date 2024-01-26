@@ -8,11 +8,16 @@ import logo2 from '../assets/logo_municipalidad.png';
 import logo3 from '../assets/logomuni_piedepagina.png';
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import emailjs from '@emailjs/browser';
+import { Validacion } from './Validacion';
 
 
 export const Registro = () => {
    
     const [confirmarContraseña, setConfirmarContraseña] = useState('');
+    
+    const [modalAbierto, setModalAbierto] = useState(false);
+    const abrirModal = () => setModalAbierto(true);
+    const cerrarModal=() => setModalAbierto(false)
     
     const[formData, setFormData]= useState({
       id_ciudadano:"",
@@ -27,11 +32,13 @@ export const Registro = () => {
       id_localidad:"",
       validado:false,
       fecha_carga:"",
-      habilita:""
+      habilita:"",
+      codVerif:""
     })
    
     const [showPassword, setShowPassword] = useState(false);
     const [showPassword2, setShowPassword2] = useState(false);
+    const [registroExitoso, setRegistroExitoso] = useState(false);
    
 
     const handleTogglePassword = () => {
@@ -45,15 +52,7 @@ export const Registro = () => {
       e.preventDefault();
   
 
-        // Validaciones
-        // ! Verificar que no haya campos vacios
-        // if(nombre.trim() === '' || telefono === ''  || dni === ''  || domicilio === ''  || celular === '' || email.trim() === '' || contraseña.trim() === '' || confirmarContraseña.trim() === ''){ 
-        //     return Swal.fire({
-        //         icon: 'error',
-        //         title: '¡Ups!',
-        //         text: 'Todos los campos son obligatorios',                
-        //       })
-        // }
+      
         // ! Verificar Email
         const patronEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -141,11 +140,15 @@ emailjs.send('service_bup50ma','template_82f6vmm', templateParams, 'FsfYHHi918Ht
   Swal.fire({
     position: "center",
     icon: "success",
-    title: `Registro exitoso!, le enviaremos un email de validación a ${formData.email_ciudadano} `,
+    title: `Formulario enviado! Pendiente de validación `,
     showConfirmButton: false,
     timer: 2500
   });
   console.log(formData)
+
+  abrirModal();
+
+  
      
         // ! Creo usuario en la base de datos
 
@@ -196,7 +199,7 @@ emailjs.send('service_bup50ma','template_82f6vmm', templateParams, 'FsfYHHi918Ht
         // }
 
         
-    }
+}
 
     const handleChange = (e,lon) => {
 
@@ -470,7 +473,13 @@ else{
 
 </footer>
 
-           
+{modalAbierto && (
+  <Validacion 
+    data={formData}
+    codverif={formData.codVerif}
+    cerrarModal={cerrarModal}
+  />
+)}       
            
        
        

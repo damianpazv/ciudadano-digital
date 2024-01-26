@@ -4,6 +4,7 @@ import viteLogo from '/vite.svg'
 //import './App.css'
 import { Registro } from './components/Registro'
 import 'bootstrap/dist/css/bootstrap.min.css';
+import { Validacion } from './components/Validacion';
 
 function App() {
   
@@ -11,6 +12,7 @@ function App() {
   return (
     <>
       <Registro/>
+      {/* <Validacion/> */}
     </>
   )
 }
