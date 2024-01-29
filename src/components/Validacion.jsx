@@ -36,6 +36,8 @@ export const Validacion = (props) => {
     showConfirmButton: false,
     timer: 2500
   });
+  data.validado=true;
+  console.log(data);
 
   cerrarModal();
 //   console.log(formData)

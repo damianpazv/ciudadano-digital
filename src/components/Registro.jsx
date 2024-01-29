@@ -11,10 +11,12 @@ import emailjs from '@emailjs/browser';
 import { Validacion } from './Validacion';
 
 
+
+
 export const Registro = () => {
    
     const [confirmarContraseña, setConfirmarContraseña] = useState('');
-    
+    const [codigo, setCodigo] = useState('');
     const [modalAbierto, setModalAbierto] = useState(false);
     const abrirModal = () => setModalAbierto(true);
     const cerrarModal=() => setModalAbierto(false)
@@ -32,8 +34,8 @@ export const Registro = () => {
       id_localidad:"",
       validado:false,
       fecha_carga:"",
-      habilita:"",
-      codVerif:""
+      habilita:""
+      
     })
    
     const [showPassword, setShowPassword] = useState(false);
@@ -113,21 +115,24 @@ if( formData.id_localidad == 0){
 
 
 
-const codigo = Math.floor(1000 + Math.random() * 9000);
+const codigo_generar=Math.floor(1000 + Math.random() * 9000) ;
 const templateParams = {
  
   to_email:formData.email_ciudadano,
   to_name:formData.nombre_ciudadano,
-  message:codigo
+  message:codigo_generar
 };
 setFormData({
   ...formData,
 
-  codVerif: codigo,
+  
   fecha_carga: new Date().toLocaleString(),
 });
 
-emailjs.send('service_bup50ma','template_82f6vmm', templateParams, 'FsfYHHi918Ht3OErb')
+setCodigo(codigo_generar);
+
+
+emailjs.send('service_bup50ma','template_82f6vmm', templateParams,import.meta.env.VITE_APP_EMAILJS_KEY)
 	.then((response) => {
 	   console.log('SUCCESS!', response.status, response.text);
 	}, (err) => {
@@ -250,12 +255,12 @@ else{
         <Container fluid >
 
       <Row className='justify-content-center ' >
-     <Col xs={8} className='mt-2 pt-3 main mb-3 pb-3'>
+     <Col xs={12} md={8}  className='mt-2 pt-3 main mb-3 pb-3'>
      
      <Form  onSubmit={handleRegister} className='m-1 p-3 '>
 
       <Row>
-<Col>
+<Col xs={12} md={6}>
 <Form.Group className="mb-3 " controlId="nombre">
     <Form.Label> <strong>Nombre y Apellido</strong> </Form.Label>
     <Form.Control
@@ -328,7 +333,7 @@ else{
 
 </Col>
 
-<Col>
+<Col xs={12} md={6}> 
 <Form.Group className=" d-flex flex-column" controlId="clave">
   <Form.Label> <strong>Clave</strong> </Form.Label>
     <Form.Control
@@ -476,7 +481,7 @@ else{
 {modalAbierto && (
   <Validacion 
     data={formData}
-    codverif={formData.codVerif}
+    codverif={codigo}
     cerrarModal={cerrarModal}
   />
 )}       
