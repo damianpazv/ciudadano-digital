@@ -9,8 +9,8 @@ import logo3 from '../assets/logomuni_piedepagina.png';
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import emailjs from '@emailjs/browser';
 import { Validacion } from './Validacion';
-
-
+import cdigitalApi from '../api/cdigitalAPI';
+import { useEffect } from 'react';
 
 
 export const Registro = () => {
@@ -41,10 +41,32 @@ export const Registro = () => {
     const [showPassword, setShowPassword] = useState(false);
     const [showPassword2, setShowPassword2] = useState(false);
     const [registroExitoso, setRegistroExitoso] = useState(false);
-   
+    const [usuariosRegistrados, setUsuariosRegistrados] = useState({
+      id_ciudadano:"",
+      dni_ciudadano:"",
+      nombre_ciudadano:"",
+      email_ciudadano:"",
+      clave_ciudadano:"",
+      telefono_ciudadano:"",
+      celular_ciudadano:"",
+      domicilio:"",
+      id_provincia:"",
+      id_localidad:"",
+      validado:false,
+      fecha_carga:"",
+      habilita:""
+      
+    });
+
+
+    useEffect(() => {
+ 
+      ciudadanosRegistradosDB();
+    }, []);
 
     const handleTogglePassword = () => {
       setShowPassword(!showPassword);
+      
     };
     const handleTogglePassword2 = () => {
       setShowPassword2(!showPassword2);
@@ -113,6 +135,23 @@ if( formData.id_localidad == 0){
     })
 }
 
+if(usuariosRegistrados.some(usuario => usuario.email_ciudadano.trim() === formData.email_ciudadano)){
+  return Swal.fire({
+    icon: 'error',
+    title: '¡Ups!',
+    text: 'El email ingresado ya se encuentra registrado',                
+  })
+
+}
+
+if(usuariosRegistrados.some(usuario => usuario.dni_ciudadano.trim() === formData.dni_ciudadano)){
+  return Swal.fire({
+    icon: 'error',
+    title: '¡Ups!',
+    text: 'El DNI ingresado ya se encuentra registrado',                
+  })
+
+}
 
 
 const codigo_generar=Math.floor(1000 + Math.random() * 9000) ;
@@ -140,71 +179,11 @@ emailjs.send('service_bup50ma','template_82f6vmm', templateParams,import.meta.en
 	});
 
 
-
+AgregarCiudadanoDB(formData);
   
-  Swal.fire({
-    position: "center",
-    icon: "success",
-    title: `Formulario enviado! Pendiente de validación `,
-    showConfirmButton: false,
-    timer: 2500
-  });
-  console.log(formData)
-
-  abrirModal();
-
-  
-     
-        // ! Creo usuario en la base de datos
-
-        // try {
-        //     const resp = await reactToMyPizzaAPI.post("api/auth/new",{
-        //         nombre,
-        //         edad,
-        //         email,
-        //         password: contraseña
-        //     })
-            
-            
-        //     //Guardo el token en el local storage
-        //     localStorage.setItem("token", resp.data.token);
-
-        //     if (resp.status === 201){
-        //         Swal.fire({
-        //             icon: 'success',
-        //             title: `Bienvenido a React to my pizza ${nombre}!`,
-        //             showConfirmButton: false,
-        //             timer: 2000
-        //           })
-        //           setTimeout(() => {
-        //             window.location.href = "/"
-        //           }, 1600);
-        //     } else{
-        //         return Swal.fire({
-        //             icon: 'error',
-        //             title: '¡Ups!',
-        //             text: 'Ocurrió un error inesperado, intentelo nuevamente',                
-        //           })
-        //     }
-        // } catch (error) { 
-                       
-        //     if (error && error.response && error.response.status === 409){
-        //         return Swal.fire({
-        //             icon: 'error',
-        //             title: '¡Ups!',
-        //             text: `Ya existe un usuario registrado con el correo ${email}`,                
-        //           }) 
-        //     } else{
-        //         return Swal.fire({
-        //             icon: 'error',
-        //             title: '¡Ups!',
-        //             text: `Ocurrió un error inesperado, intentelo de nuevo`,                
-        //           }) 
-        //     }
-        // }
-
+abrirModal();
         
-}
+       }
 
     const handleChange = (e,lon) => {
 
@@ -233,7 +212,41 @@ else{
      
        }
 
+    const AgregarCiudadanoDB= async (data) =>
+       {
+       
+           try{
+               const resp=await cdigitalApi.post("/api/usuarios",data);
+               
+               Swal.fire({
+                position: "center",
+                icon: "success",
+                title: `Formulario enviado! Pendiente de validación `,
+                showConfirmButton: false,
+                timer: 2500
+              });
+           }
+       
+           catch(error)
+           {
+           console.log(error);
+           }
+       }
 
+    const ciudadanosRegistradosDB= async () =>
+       {
+       
+           try{
+               const resp=await cdigitalApi.get("/api/usuarios");
+               
+             setUsuariosRegistrados(resp.data.ciudadanos)
+           }
+       
+           catch(error)
+           {
+           console.log(error);
+           }
+       }
 
   return (
     <>
@@ -249,9 +262,6 @@ else{
   
 <h1 className=' text-center mt-2 titulo'>Registro del ciudadano</h1>
         
-        
-        
-
         <Container fluid >
 
       <Row className='justify-content-center ' >
@@ -261,6 +271,20 @@ else{
 
       <Row>
 <Col xs={12} md={6}>
+<Form.Group className="mb-3" controlId="dni">
+    <Form.Label> <strong>DNI</strong> </Form.Label>
+    <Form.Control
+      type="number"
+      placeholder='16234568'
+      onChange={(e)=>handleChange(e,8)}
+      value={formData.dni_ciudadano}
+      name="dni_ciudadano"
+      required
+      
+    />
+ 
+
+  </Form.Group>
 <Form.Group className="mb-3 " controlId="nombre">
     <Form.Label> <strong>Nombre y Apellido</strong> </Form.Label>
     <Form.Control
@@ -313,23 +337,7 @@ else{
       required
     />
   </Form.Group>
-  <Form.Group className="mb-3" controlId="dni">
-    <Form.Label> <strong>DNI</strong> </Form.Label>
-    <Form.Control
-      type="number"
-      placeholder='16234568'
-      onChange={(e)=>handleChange(e,8)}
-      value={formData.dni_ciudadano}
-      name="dni_ciudadano"
-      required
-      
-    />
  
-
-
-  </Form.Group>
-
-
 
 </Col>
 
@@ -390,7 +398,6 @@ else{
   </div>
   </Form.Group>
 
- 
 
   <Form.Group className="mb-3" controlId="domicilio">
     <Form.Label> <strong> Domicilio</strong></Form.Label>
@@ -457,7 +464,15 @@ else{
   </div>
 
 </Col>
-
+<div className=" mt-4">
+        <Form.Check
+          type="checkbox"
+          id="default-checkbox"
+          label="Acepto los términos y condiciones"
+          required
+        />
+        
+      </div>
 </Row>
 
  
@@ -467,8 +482,6 @@ else{
          
       </Row>
     </Container>
-
-
 
 <footer className='footer'>
   <div className='text-center'>
@@ -486,11 +499,6 @@ else{
   />
 )}       
            
-       
-       
- 
-
-   
     
     </>
   )

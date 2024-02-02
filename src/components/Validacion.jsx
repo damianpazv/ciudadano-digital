@@ -8,6 +8,7 @@ import logo2 from '../assets/logo_municipalidad.png';
 import logo3 from '../assets/logomuni_piedepagina.png';
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import emailjs from '@emailjs/browser';
+import cdigitalApi from '../api/cdigitalAPI';
 
 
 export const Validacion = (props) => {
@@ -29,15 +30,11 @@ export const Validacion = (props) => {
 
       }
   
-  Swal.fire({
-    position: "center",
-    icon: "success",
-    title: `codigo correcto! registro validado `,
-    showConfirmButton: false,
-    timer: 2500
-  });
+ 
   data.validado=true;
-  console.log(data);
+
+  ValidarCiudadanoDB(data);
+  
 
   cerrarModal();
 //   console.log(formData)
@@ -92,6 +89,29 @@ export const Validacion = (props) => {
 
         
     }
+
+
+    const ValidarCiudadanoDB= async (data) =>
+    {
+    
+        try{
+            const resp=await cdigitalApi.put("/api/usuarios",data);
+            
+            Swal.fire({
+              position: "center",
+              icon: "success",
+              title: `codigo correcto! registro validado `,
+              showConfirmButton: false,
+              timer: 2500
+            });
+        }
+    
+        catch(error)
+        {
+        console.log(error);
+        }
+    }
+
 
     const handleChange = (e) => {
 
