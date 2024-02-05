@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import '../css/registro.css';
 import Swal from 'sweetalert2';
-import { Button, Col, Container, Form, Row } from 'react-bootstrap';
+import { Button, Col, Container, Form, FormControl, Row } from 'react-bootstrap';
 //import { Navigate } from 'react-router';
 import logo from '../assets/Logo_Muni200x200.png';
 import logo2 from '../assets/logo_municipalidad.png';
@@ -11,6 +11,7 @@ import emailjs from '@emailjs/browser';
 import { Validacion } from './Validacion';
 import cdigitalApi from '../api/cdigitalAPI';
 import { useEffect } from 'react';
+import moment from 'moment-timezone';
 
 
 export const Registro = () => {
@@ -22,7 +23,7 @@ export const Registro = () => {
     const cerrarModal=() => setModalAbierto(false)
     
     const[formData, setFormData]= useState({
-      id_ciudadano:"",
+      
       dni_ciudadano:"",
       nombre_ciudadano:"",
       email_ciudadano:"",
@@ -30,39 +31,49 @@ export const Registro = () => {
       telefono_ciudadano:"",
       celular_ciudadano:"",
       domicilio:"",
-      id_provincia:"",
-      id_localidad:"",
+      provincia:"",
+      localidad:"",
       validado:false,
       fecha_carga:"",
-      habilita:""
+      habilita:false
       
     })
    
     const [showPassword, setShowPassword] = useState(false);
     const [showPassword2, setShowPassword2] = useState(false);
     const [registroExitoso, setRegistroExitoso] = useState(false);
-    const [usuariosRegistrados, setUsuariosRegistrados] = useState({
-      id_ciudadano:"",
-      dni_ciudadano:"",
-      nombre_ciudadano:"",
-      email_ciudadano:"",
-      clave_ciudadano:"",
-      telefono_ciudadano:"",
-      celular_ciudadano:"",
-      domicilio:"",
-      id_provincia:"",
-      id_localidad:"",
-      validado:false,
-      fecha_carga:"",
-      habilita:""
-      
-    });
+    const [DNIRegistrado, setDNIRegistrado] = useState({});
+    const [EMAILRegistrado, setEMAILRegistrado] = useState({});
 
+    const provinciasArgentina = [
+      "Buenos Aires",
+      "Catamarca",
+      "Chaco",
+      "Chubut",
+      "Córdoba",
+      "Corrientes",
+      "Entre Ríos",
+      "Formosa",
+      "Jujuy",
+      "La Pampa",
+      "La Rioja",
+      "Mendoza",
+      "Misiones",
+      "Neuquén",
+      "Río Negro",
+      "Salta",
+      "San Juan",
+      "San Luis",
+      "Santa Cruz",
+      "Santa Fe",
+      "Santiago del Estero",
+      "Tierra del Fuego",
+      "Tucumán"
+    ];
+    const fecha = new Date();
+    const fechaFormateada = moment.tz(fecha, 'America/Argentina/Buenos_Aires').format('YYYY-MM-DD HH:mm:ss.SSS');
+  
 
-    useEffect(() => {
- 
-      ciudadanosRegistradosDB();
-    }, []);
 
     const handleTogglePassword = () => {
       setShowPassword(!showPassword);
@@ -74,7 +85,12 @@ export const Registro = () => {
 
     const handleRegister = async (e)=>{
       e.preventDefault();
-  
+      // setFormData({
+      //   ...formData,
+      
+        
+      //   fecha_carga: new Date().toLocaleString(),
+      // });
 
       
         // ! Verificar Email
@@ -112,22 +128,22 @@ export const Registro = () => {
           })
     }
 
-    if( formData.telefono_ciudadano.length != 7){
-      return Swal.fire({
-          icon: 'error',
-          title: '¡Ups!',
-          text: 'El nro de teléfono debe tener 7 caracteres sin guiones ejemplo: 4223456',                
-        })
-  }
+  //   if( formData.telefono_ciudadano.length != 7){
+  //     return Swal.fire({
+  //         icon: 'error',
+  //         title: '¡Ups!',
+  //         text: 'El nro de teléfono debe tener 7 caracteres sin guiones ejemplo: 4223456',                
+  //       })
+  // }
 
-  if( formData.id_provincia == 0){
+  if( formData.provincia == 0){
     return Swal.fire({
         icon: 'error',
         title: '¡Ups!',
         text: 'Debe seleccionar una provincia',                
       })
 }
-if( formData.id_localidad == 0){
+if( formData.localidad == 0){
   return Swal.fire({
       icon: 'error',
       title: '¡Ups!',
@@ -135,16 +151,12 @@ if( formData.id_localidad == 0){
     })
 }
 
-if(usuariosRegistrados.some(usuario => usuario.email_ciudadano.trim() === formData.email_ciudadano)){
-  return Swal.fire({
-    icon: 'error',
-    title: '¡Ups!',
-    text: 'El email ingresado ya se encuentra registrado',                
-  })
+try{
+  const resp=await cdigitalApi.get(`/api/usuarios/dni/${formData.dni_ciudadano} `);
+  const resp2=await cdigitalApi.get(`/api/usuarios/email/${formData.email_ciudadano} `);
 
-}
 
-if(usuariosRegistrados.some(usuario => usuario.dni_ciudadano.trim() === formData.dni_ciudadano)){
+ if(resp.data.ciudadano){
   return Swal.fire({
     icon: 'error',
     title: '¡Ups!',
@@ -152,6 +164,30 @@ if(usuariosRegistrados.some(usuario => usuario.dni_ciudadano.trim() === formData
   })
 
 }
+if(resp2.data.ciudadano){
+  return Swal.fire({
+    icon: 'error',
+    title: '¡Ups!',
+    text: 'El Email ingresado ya se encuentra registrado',                
+  })
+
+}
+
+}
+
+catch(error)
+{
+console.log(error);
+}
+
+
+
+
+
+
+
+
+
 
 
 const codigo_generar=Math.floor(1000 + Math.random() * 9000) ;
@@ -161,12 +197,7 @@ const templateParams = {
   to_name:formData.nombre_ciudadano,
   message:codigo_generar
 };
-setFormData({
-  ...formData,
 
-  
-  fecha_carga: new Date().toLocaleString(),
-});
 
 setCodigo(codigo_generar);
 
@@ -178,10 +209,10 @@ emailjs.send('service_bup50ma','template_82f6vmm', templateParams,import.meta.en
 	   console.log('FAILED...', err);
 	});
 
-
+console.log(formData)
 AgregarCiudadanoDB(formData);
   
-abrirModal();
+
         
        }
 
@@ -192,6 +223,7 @@ if(e.target.type=="number")
   setFormData({
     ...formData,
     [e.target.name]: e.target.value.slice(0,lon),
+     fecha_carga: fechaFormateada,
     
 });
 // setFormData({
@@ -225,6 +257,8 @@ else{
                 showConfirmButton: false,
                 timer: 2500
               });
+              abrirModal();
+              console.log(data);
            }
        
            catch(error)
@@ -233,21 +267,8 @@ else{
            }
        }
 
-    const ciudadanosRegistradosDB= async () =>
-       {
-       
-           try{
-               const resp=await cdigitalApi.get("/api/usuarios");
-               
-             setUsuariosRegistrados(resp.data.ciudadanos)
-           }
-       
-           catch(error)
-           {
-           console.log(error);
-           }
-       }
 
+   
   return (
     <>
    
@@ -321,7 +342,7 @@ else{
       name="telefono_ciudadano"
       onChange={(e)=>handleChange(e,7)}
       value={formData.telefono_ciudadano}
-      required
+      
       
     />
   </Form.Group>
@@ -416,18 +437,21 @@ else{
     <Form.Label> <strong>Provincia</strong> </Form.Label>
     
  <Form.Select 
- type="number"    
+ type="text"    
  onChange={handleChange}
- value={formData.id_provincia}
- name="id_provincia"
+ value={formData.provincia}
+ name="provincia"
  maxLength={2}
  required
  
  >
-      <option value={0}>Seleccione Provincia</option>
-      <option value={11} >Tucuman</option>
-      <option value={22}>Salta</option>
-      <option value={33}>Jujuy</option>
+     <option value={0}>Seleccione Provincia</option>
+      {provinciasArgentina.map((provincia, index) => (
+        <option key={index} value={provincia}>
+          {provincia}
+        </option>
+      ))}
+      
       
     </Form.Select>
   </Form.Group>
@@ -435,21 +459,25 @@ else{
   <Form.Group className="mb-3" controlId="Localidad">
     <Form.Label> <strong>Localidad</strong> </Form.Label>
     
- <Form.Select 
- type="number"    
+ <Form.Control
+ 
+ type="text"    
  onChange={handleChange}
- value={formData.id_localidad}
- name="id_localidad"
+ value={formData.localidad}
+ name="localidad"
  
  required
  
- >
-      <option value={0}>Seleccione Localidad</option>
-      <option value={1111} >San miguel de Tucuman</option>
-      <option value={2222}>San Cayetano</option>
-      <option value={3333}>San Jose</option>
+ />
+ 
+
+ 
+
+ 
+ 
+   
       
-    </Form.Select>
+   
   </Form.Group>
 </Col>
 
