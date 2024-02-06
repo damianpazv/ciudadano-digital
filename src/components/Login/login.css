@@ -1,0 +1,45 @@
+:root {
+    --rojo: #655aff;
+    --negro: #252525;
+    --amarillo: #81fc87;
+  }
+  .main {
+  
+    background-color:rgba(175, 173, 247, 0.719);
+  }
+.banner{
+  background-color: #655aff;
+  height: 7rem;
+}
+
+.footer{
+  background-color: #655aff;
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  height: 70px; /* Altura del footer */
+  
+}
+
+.logo{
+  width: 115px;
+  
+}
+
+.logo2{
+  width: 250px;
+}
+.logo3{
+  width: 230px;
+}
+
+.titulo{
+  color: #070161;  
+}
+
+.ojo{
+  position:relative;
+  color: #6d6d6d;
+  bottom: 25px;
+  right: 5px;
+}

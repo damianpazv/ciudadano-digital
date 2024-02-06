@@ -12,6 +12,9 @@ import { Validacion } from './Validacion';
 import cdigitalApi from '../api/cdigitalAPI';
 import { useEffect } from 'react';
 import moment from 'moment-timezone';
+import { useNavigate } from 'react-router-dom/dist';
+
+
 
 
 export const Registro = () => {
@@ -73,7 +76,7 @@ export const Registro = () => {
     const fecha = new Date();
     const fechaFormateada = moment.tz(fecha, 'America/Argentina/Buenos_Aires').format('YYYY-MM-DD HH:mm:ss.SSS');
   
-
+    const navigate = useNavigate();
 
     const handleTogglePassword = () => {
       setShowPassword(!showPassword);
@@ -501,6 +504,8 @@ else{
         />
         
       </div>
+
+   
 </Row>
 
  
@@ -509,6 +514,8 @@ else{
      </Col>
          
       </Row>
+
+
     </Container>
 
 <footer className='footer'>

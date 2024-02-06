@@ -9,6 +9,7 @@ import logo3 from '../assets/logomuni_piedepagina.png';
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import emailjs from '@emailjs/browser';
 import cdigitalApi from '../api/cdigitalAPI';
+import { useNavigate } from 'react-router-dom/dist';
 
 
 export const Validacion = (props) => {
@@ -16,6 +17,7 @@ export const Validacion = (props) => {
   
     const { data, codverif,cerrarModal } = props;
     const [codigoIngresado, setCodigoIngresado] = useState('');
+    const navigate = useNavigate();
 
     const validar = async (e)=>{
       e.preventDefault();
@@ -104,6 +106,8 @@ export const Validacion = (props) => {
               showConfirmButton: false,
               timer: 2500
             });
+
+            navigate("/login")
         }
     
         catch(error)

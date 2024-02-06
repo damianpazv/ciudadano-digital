@@ -4,17 +4,44 @@ import viteLogo from '/vite.svg'
 //import './App.css'
 import { Registro } from './components/Registro'
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { Validacion } from './components/Validacion';
+
+import { BrowserRouter, Route, Routes } from 'react-router-dom/dist';
+import Login from './components/Login/Login';
 
 function App() {
   
-
   return (
-    <>
-      <Registro/>
-      {/* <Validacion/> */}
-    </>
+    <div>
+
+<BrowserRouter>
+
+<Routes>
+
+{/* <Route  path='/'  element={ <Login />   } /> */}
+<Route  path='/login'  element={ <Login />   } />
+
+<Route  path='/'  element={ <Registro />   } />
+
+</Routes>
+</BrowserRouter>
+
+
+
+
+
+
+
+
+
+
+
+    </div>
   )
+
+
+
+
+
 }
 
 export default App
