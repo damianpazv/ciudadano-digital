@@ -1,6 +1,7 @@
 import "./login.css";
- import logo from '../../assets/Logo_Muni200x200.png';
-import logo2 from '../../assets/logo_municipalidad.png';
+ import logo from '../../assets/logo1.png';
+import logo2 from '../../assets/logo5.png';
+import logo3 from '../../assets/logo4.png';
 import { useContext, useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -98,8 +99,8 @@ const handleLogin = async (e) =>{
 <header>
 <div className='banner d-flex '>
       <div className=''>
-        <img src={logo} alt="Logo 1" className='logo p-2' />
-        <img src={logo2} alt="Logo 1" className='logo2 p-2' />
+        <img src={logo2} alt="Logo 1" className='logo ' />
+        
       </div>
     
     </div>
@@ -114,7 +115,7 @@ const handleLogin = async (e) =>{
 
 <Row  className='justify-content-center mt-3 ' >
 
-<Col xs={8} md={3}  className='mt-5  main mb-3 pb-3'>
+<Col xs={8} md={3}  className='mt-5  mainlogin mb-3 pb-3'>
 
 
 <Form onSubmit={handleLogin} className="m-4 d-flex flex-column">
@@ -187,10 +188,10 @@ const handleLogin = async (e) =>{
 
 </Container>
        
-<footer className='footer mt-4 pt-2 '>
+<footer className='footerlogin mt-4 pt-2 '>
   <div className='text-center'>
 
-  <img src={logo2} alt="Logo 1" className='logo3 p-2' />
+  <img src={logo3} alt="Logo 1" className='logo3 p-2' />
   </div>
 
 </footer>

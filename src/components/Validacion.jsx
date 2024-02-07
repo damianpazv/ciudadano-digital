@@ -3,9 +3,9 @@ import '../css/registro.css';
 import Swal from 'sweetalert2';
 import { Button, Col, Container, Form, Modal, ModalBody, ModalFooter, Row } from 'react-bootstrap';
 //import { Navigate } from 'react-router';
-import logo from '../assets/Logo_Muni200x200.png';
-import logo2 from '../assets/logo_municipalidad.png';
-import logo3 from '../assets/logomuni_piedepagina.png';
+// import logo from '../assets/Logo_Muni200x200.png';
+// import logo2 from '../assets/logo_municipalidad.png';
+// import logo3 from '../assets/logomuni_piedepagina.png';
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import emailjs from '@emailjs/browser';
 import cdigitalApi from '../api/cdigitalAPI';
@@ -17,78 +17,19 @@ export const Validacion = (props) => {
   
     const { data, codverif,cerrarModal } = props;
     const [codigoIngresado, setCodigoIngresado] = useState('');
+    const[datos,setDatos]= useState({email_ciudadano:data.email_ciudadano,
+    codigo_verif:codigoIngresado});
     const navigate = useNavigate();
 
     const validar = async (e)=>{
       e.preventDefault();
-  
-      if(codigoIngresado!=codverif)
-      {
-        return Swal.fire({
-            icon: 'error',
-            title: '¡Ups!',
-            text: 'el codigo ingresado es incorrecto',                
-          })
+console.log(datos)
 
-      }
-  
- 
-  data.validado=true;
 
   ValidarCiudadanoDB(data);
   
 
   cerrarModal();
-//   console.log(formData)
-     
-        // ! Creo usuario en la base de datos
-
-        // try {
-        //     const resp = await reactToMyPizzaAPI.post("api/auth/new",{
-        //         nombre,
-        //         edad,
-        //         email,
-        //         password: contraseña
-        //     })
-            
-            
-        //     //Guardo el token en el local storage
-        //     localStorage.setItem("token", resp.data.token);
-
-        //     if (resp.status === 201){
-        //         Swal.fire({
-        //             icon: 'success',
-        //             title: `Bienvenido a React to my pizza ${nombre}!`,
-        //             showConfirmButton: false,
-        //             timer: 2000
-        //           })
-        //           setTimeout(() => {
-        //             window.location.href = "/"
-        //           }, 1600);
-        //     } else{
-        //         return Swal.fire({
-        //             icon: 'error',
-        //             title: '¡Ups!',
-        //             text: 'Ocurrió un error inesperado, intentelo nuevamente',                
-        //           })
-        //     }
-        // } catch (error) { 
-                       
-        //     if (error && error.response && error.response.status === 409){
-        //         return Swal.fire({
-        //             icon: 'error',
-        //             title: '¡Ups!',
-        //             text: `Ya existe un usuario registrado con el correo ${email}`,                
-        //           }) 
-        //     } else{
-        //         return Swal.fire({
-        //             icon: 'error',
-        //             title: '¡Ups!',
-        //             text: `Ocurrió un error inesperado, intentelo de nuevo`,                
-        //           }) 
-        //     }
-        // }
-
         
     }
 
@@ -97,17 +38,31 @@ export const Validacion = (props) => {
     {
     
         try{
-            const resp=await cdigitalApi.put("/api/usuarios",data);
-            
-            Swal.fire({
-              position: "center",
-              icon: "success",
-              title: `codigo correcto! registro validado `,
-              showConfirmButton: false,
-              timer: 2500
-            });
+            const resp=await cdigitalApi.put("/api/usuarios",data.email_ciudadano,codigoIngresado);
 
-            navigate("/login")
+            if(resp.data.ok)
+            {
+              Swal.fire({
+                position: "center",
+                icon: "success",
+                title: `codigo correcto! registro validado `,
+                showConfirmButton: false,
+                timer: 2500
+              });
+  
+              navigate("/login")
+            }
+
+            else{
+              return Swal.fire({
+                icon: 'error',
+                title: '¡Ups!',
+                text: 'el codigo ingresado es incorrecto',                
+              })
+
+            }
+            
+          
         }
     
         catch(error)

@@ -3,9 +3,9 @@ import '../css/registro.css';
 import Swal from 'sweetalert2';
 import { Button, Col, Container, Form, FormControl, Row } from 'react-bootstrap';
 //import { Navigate } from 'react-router';
-import logo from '../assets/Logo_Muni200x200.png';
-import logo2 from '../assets/logo_municipalidad.png';
-import logo3 from '../assets/logomuni_piedepagina.png';
+import logo from '../assets/logo1.png';
+import logo2 from '../assets/logo5.png';
+import logo3 from '../assets/logo4.png';
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import emailjs from '@emailjs/browser';
 import { Validacion } from './Validacion';
@@ -13,7 +13,7 @@ import cdigitalApi from '../api/cdigitalAPI';
 import { useEffect } from 'react';
 import moment from 'moment-timezone';
 import { useNavigate } from 'react-router-dom/dist';
-
+// import Email from 'smtpjs';
 
 
 
@@ -184,35 +184,6 @@ console.log(error);
 }
 
 
-
-
-
-
-
-
-
-
-
-const codigo_generar=Math.floor(1000 + Math.random() * 9000) ;
-const templateParams = {
- 
-  to_email:formData.email_ciudadano,
-  to_name:formData.nombre_ciudadano,
-  message:codigo_generar
-};
-
-
-setCodigo(codigo_generar);
-
-
-emailjs.send('service_bup50ma','template_82f6vmm', templateParams,import.meta.env.VITE_APP_EMAILJS_KEY)
-	.then((response) => {
-	   console.log('SUCCESS!', response.status, response.text);
-	}, (err) => {
-	   console.log('FAILED...', err);
-	});
-
-console.log(formData)
 AgregarCiudadanoDB(formData);
   
 
@@ -275,14 +246,16 @@ else{
   return (
     <>
    
-
-   <div className='banner d-flex '>
+<header>
+<div className='banner d-flex '>
       <div className=''>
-        <img src={logo} alt="Logo 1" className='logo p-2' />
-        <img src={logo2} alt="Logo 1" className='logo2 p-2' />
+        <img src={logo2} alt="Logo 1" className='logo p-2' />
+        
       </div>
     
     </div>
+</header>
+
   
 <h1 className=' text-center mt-2 titulo'>Registro del ciudadano</h1>
         
@@ -518,10 +491,12 @@ else{
 
     </Container>
 
-<footer className='footer'>
+<footer
+ className='footerregistro'
+ >
   <div className='text-center'>
 
-  <img src={logo2} alt="Logo 1" className='logo3 p-2' />
+  <img src={logo3} alt="Logo 1" className='logo3 p-2' />
   </div>
 
 </footer>
