@@ -22,7 +22,10 @@ export const Registro = () => {
     const [confirmarContraseña, setConfirmarContraseña] = useState('');
     const [codigo, setCodigo] = useState('');
     const [modalAbierto, setModalAbierto] = useState(false);
-    const abrirModal = () => setModalAbierto(true);
+    const abrirModal = () => {
+      console.log("Abriendo modal...");
+      setModalAbierto(true);
+  };
     const cerrarModal=() => setModalAbierto(false)
     
     const[formData, setFormData]= useState({
@@ -232,7 +235,7 @@ else{
                 timer: 2500
               });
               abrirModal();
-              console.log(data);
+             
            }
        
            catch(error)
@@ -503,9 +506,9 @@ else{
 
 {modalAbierto && (
   <Validacion 
-    data={formData}
-    codverif={codigo}
-    cerrarModal={cerrarModal}
+  data={formData}
+  cerrarModal={cerrarModal}
+  setModalAbierto={setModalAbierto}
   />
 )}       
            

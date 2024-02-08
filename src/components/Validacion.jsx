@@ -15,70 +15,79 @@ import { useNavigate } from 'react-router-dom/dist';
 export const Validacion = (props) => {
    
   
-    const { data, codverif,cerrarModal } = props;
-    const [codigoIngresado, setCodigoIngresado] = useState('');
+  const { data, cerrarModal, setModalAbierto } = props;
     const[datos,setDatos]= useState({email_ciudadano:data.email_ciudadano,
-    codigo_verif:codigoIngresado});
+    codigo_verif:undefined});
     const navigate = useNavigate();
+    
 
     const validar = async (e)=>{
       e.preventDefault();
-console.log(datos)
+     
 
 
   ValidarCiudadanoDB(data);
   
 
-  cerrarModal();
+
+
+  
         
     }
 
 
-    const ValidarCiudadanoDB= async (data) =>
-    {
-    
-        try{
-            const resp=await cdigitalApi.put("/api/usuarios",data.email_ciudadano,codigoIngresado);
 
-            if(resp.data.ok)
-            {
+    const ValidarCiudadanoDB = async (data) => {
+      try {
+          const resp = await cdigitalApi.put("/api/usuarios", datos);
+  
+          if (resp.data.ok) {
               Swal.fire({
-                position: "center",
-                icon: "success",
-                title: `codigo correcto! registro validado `,
-                showConfirmButton: false,
-                timer: 2500
+                  position: "center",
+                  icon: "success",
+                  title: `¡Código correcto! Registro validado.`,
+                  showConfirmButton: false,
+                  timer: 2000
               });
   
-              navigate("/login")
-            }
-
-            else{
-              return Swal.fire({
+              setTimeout(() => {
+                  navigate("/login");
+              }, 2500);
+          } else {
+              Swal.fire({
                 icon: 'error',
                 title: '¡Ups!',
-                text: 'el codigo ingresado es incorrecto',                
-              })
-
-            }
-            
-          
-        }
-    
-        catch(error)
-        {
-        console.log(error);
-        }
-    }
+                text: 'El código ingresado es incorrecto.',
+                showCancelButton: true,
+                confirmButtonText: 'Intentar de nuevo',
+                cancelButtonText: 'Cancelar',
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+              }).then((result) => {
+                  if (result.isConfirmed) { // Si el usuario hace clic en "Intentar de nuevo"
+                      setModalAbierto(true);
+                  }
+                  else{
+                    setModalAbierto(false);
+                  }
+              });
+          }
+      } catch (error) {
+          console.log(error);
+      }
+  }
+  
 
 
     const handleChange = (e) => {
 
-        setCodigoIngresado(
-            e.target.value.slice(0, 4)
-          );
+     
 
-           
+          setDatos({
+            ...datos,
+            [e.target.name]:parseInt(e.target.value.slice(0, 4)) ,
+            
+        });
 
      }
 
@@ -106,9 +115,9 @@ console.log(datos)
     <Form.Control
       type="number"
      
-      name="codigo"
-      onChange={(e)=>handleChange(e)}
-       value={codigoIngresado}
+      name="codigo_verif"
+      onChange={handleChange}
+       value={datos.codigo_verif}
       required
       
     />
