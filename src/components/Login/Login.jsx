@@ -99,7 +99,7 @@ const handleLogin = async (e) =>{
 <header>
 <div className='banner d-flex '>
       <div className=''>
-        <img src={logo2} alt="Logo 1" className='logo ' />
+        <img src={logo2} alt="Logo 1" className='logo mt-3 ms-2' />
         
       </div>
     
@@ -188,10 +188,15 @@ const handleLogin = async (e) =>{
 
 </Container>
        
-<footer className='footerlogin mt-4 pt-2 '>
-  <div className='text-center'>
+<footer
+ className='footerlogin d-flex flex-row justify-content-between'
+ >
+  <div >
 
-  <img src={logo3} alt="Logo 1" className='logo3 p-2' />
+  <img src={logo3} alt="Logo 1" className='logo3 mt-3 ms-2' />
+  </div>
+  <div className='mt-4 me-3'>
+    <p className='text-light'>Desarrollado por: Dirección de innovación tecnológica -Todos los derechos reservados</p>
   </div>
 
 </footer>

@@ -250,9 +250,9 @@ else{
     <>
    
 <header>
-<div className='banner d-flex '>
+<div className='bannerRegistro d-flex '>
       <div className=''>
-        <img src={logo2} alt="Logo 1" className='logo p-2' />
+        <img src={logo2} alt="Logo 1" className='logo  mt-3 ms-2' />
         
       </div>
     
@@ -495,11 +495,14 @@ else{
     </Container>
 
 <footer
- className='footerregistro'
+ className='footerregistro d-flex flex-row justify-content-between'
  >
-  <div className='text-center'>
+  <div >
 
   <img src={logo3} alt="Logo 1" className='logo3 p-2' />
+  </div>
+  <div className='mt-3 me-3 ms-2'>
+    <p className='text-light'>Desarrollado por: Dirección de innovación tecnológica -Todos los derechos reservados</p>
   </div>
 
 </footer>

@@ -1,5 +1,5 @@
 :root {
-    --rojo: :#8db9fb;
+    --rojo: :#1F89F6;
     --negro: #252525;
     --amarillo: #81fc87;
   }
@@ -10,13 +10,13 @@
     border-radius: 10px;
     box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
   }
-.banner{
-  background-color: #8db9fb;
-  height: 7rem;
+.bannerRegistro{
+  background-color: #1F89F6;
+  height: 6rem;
 }
 
 .footerregistro{
-  background-color:#8db9fb;
+  background-color:#1F89F6;
   /* position: absolute;
   bottom: 0;
   width: 100%;
@@ -25,7 +25,7 @@
 }
 
 .logo{
-  width: 115px;
+  width: 400px;
   
 }
 

@@ -10,12 +10,12 @@
     box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5); /* Establece el grosor, el estilo y el color del borde */
   }
 .banner{
-  background-color: #8db9fb;
+  background-color: #1F89F6;
   height: 6rem;
 }
 
 .footerlogin{
-  background-color:#8db9fb;
+  background-color:#1F89F6;
   position: absolute;
   bottom: 0;
   width: 100%;
@@ -24,7 +24,7 @@
 }
 
 .logo{
-  width: 160px;
+  width: 150px;
   
 }
 
