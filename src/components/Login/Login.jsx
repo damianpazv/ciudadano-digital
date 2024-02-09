@@ -11,22 +11,17 @@ import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
 import cdigitalApi from "../../api/cdigitalAPI";
 import Swal from 'sweetalert2';
 
-
-
-
 export const Login = () => {
   
 //   const { login } = useStore();
 //  const location = useLocation();
  const navigate = useNavigate();
-
-
   //   LOGIN_VALUES,
   //   login,
   //   validationLogin
   // );
-  const [showPassword, setShowPassword] = useState(false);
-  const handleShowPassword = () => {
+ const [showPassword, setShowPassword] = useState(false);
+ const handleShowPassword = () => {
     setShowPassword(!showPassword);
   };
 
@@ -47,8 +42,6 @@ export const Login = () => {
 
 const handleLogin = async (e) =>{
   e.preventDefault();
-
-
 
   try{
     
@@ -79,9 +72,6 @@ const handleLogin = async (e) =>{
   })
  }
  
-
-
-  
   }
   
   catch(error)
@@ -106,11 +96,7 @@ const handleLogin = async (e) =>{
     </div>
 
 </header>
-
-
-
-
-    
+ 
 <Container fluid >
 
 <Row  className='justify-content-center mt-3 ' >
@@ -130,7 +116,7 @@ const handleLogin = async (e) =>{
     <Form.Label> <strong>Email </strong> </Form.Label>
     <Form.Control
       type="email"
-      placeholder="name@example.com"
+      placeholder="nombre@ejemplo.com"
       name="email_ciudadano"
       onChange={handleChange}
       maxLength={70}
@@ -139,14 +125,11 @@ const handleLogin = async (e) =>{
     />
   </Form.Group>
 
-
-
-
   <Form.Group className=" d-flex flex-column" controlId="clave">
   <Form.Label> <strong>Clave</strong> </Form.Label>
     <Form.Control
      type={showPassword ? 'text' : 'password'}
-      placeholder='Escriba una clave'
+      placeholder='Escriba su clave'
       name="clave_ciudadano"
       onChange={handleChange}
       value={formData.clave_ciudadano}
@@ -177,31 +160,21 @@ const handleLogin = async (e) =>{
 </Button>
         </Form>
 
-
 </Col>
 
-
-
 </Row>
-  
-
 
 </Container>
        
-<footer
- className='footerlogin d-flex flex-row justify-content-between'
- >
-  <div >
-
-  <img src={logo3} alt="Logo 1" className='logo3 mt-3 ms-2' />
+<footer className='footerlogin d-flex flex-row  justify-content-center justify-content-sm-between'>
+  <div className='col-xs-12 text-center'>
+    <img src={logo3} alt="Logo 1" className='logo3 mt-3 ms-2 mx-auto' />
   </div>
-  <div className='mt-4 me-3'>
-    <p className='text-light'>Desarrollado por: Dirección de innovación tecnológica -Todos los derechos reservados</p>
+  <div className='mt-4 me-3 d-none d-sm-block'>
+    <p className='text-light'>Desarrollado por: Dirección de innovación tecnológica</p>
   </div>
-
 </footer>
- 
-    </>
+ </>
  
     );
 

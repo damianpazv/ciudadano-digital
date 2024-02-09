@@ -3,6 +3,16 @@
     --negro: #252525;
     --amarillo: #81fc87;
   }
+
+  @font-face {
+    font-family: 'poppins';
+    src: url("../assets/Poppins-Regular.ttf") format('truetype');
+  }
+  body{
+    font-family:"poppins";
+    
+  }
+
   .main {
   
     background-color:#bfbfbf;
@@ -47,3 +57,7 @@
   right: 5px;
 }
 
+body{
+  font-family:"poppins";
+  
+}

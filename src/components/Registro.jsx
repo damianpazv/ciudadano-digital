@@ -2,7 +2,6 @@ import React, { useState } from 'react'
 import '../css/registro.css';
 import Swal from 'sweetalert2';
 import { Button, Col, Container, Form, FormControl, Row } from 'react-bootstrap';
-//import { Navigate } from 'react-router';
 import logo from '../assets/logo1.png';
 import logo2 from '../assets/logo5.png';
 import logo3 from '../assets/logo4.png';
@@ -12,23 +11,20 @@ import { Validacion } from './Validacion';
 import cdigitalApi from '../api/cdigitalAPI';
 import { useEffect } from 'react';
 import moment from 'moment-timezone';
-import { useNavigate } from 'react-router-dom/dist';
-// import Email from 'smtpjs';
-
 
 
 export const Registro = () => {
    
-    const [confirmarContraseña, setConfirmarContraseña] = useState('');
-    const [codigo, setCodigo] = useState('');
-    const [modalAbierto, setModalAbierto] = useState(false);
-    const abrirModal = () => {
+  const [confirmarContraseña, setConfirmarContraseña] = useState('');
+  const [codigo, setCodigo] = useState('');
+  const [modalAbierto, setModalAbierto] = useState(false);
+  const abrirModal = () => {
       console.log("Abriendo modal...");
       setModalAbierto(true);
   };
-    const cerrarModal=() => setModalAbierto(false)
+  const cerrarModal=() => setModalAbierto(false)
     
-    const[formData, setFormData]= useState({
+  const[formData, setFormData]= useState({
       
       dni_ciudadano:"",
       nombre_ciudadano:"",
@@ -44,14 +40,10 @@ export const Registro = () => {
       habilita:false
       
     })
-   
-    const [showPassword, setShowPassword] = useState(false);
-    const [showPassword2, setShowPassword2] = useState(false);
-    const [registroExitoso, setRegistroExitoso] = useState(false);
-    const [DNIRegistrado, setDNIRegistrado] = useState({});
-    const [EMAILRegistrado, setEMAILRegistrado] = useState({});
+  const [showPassword, setShowPassword] = useState(false);
+  const [showPassword2, setShowPassword2] = useState(false);
 
-    const provinciasArgentina = [
+  const provinciasArgentina = [
       "Buenos Aires",
       "Catamarca",
       "Chaco",
@@ -76,20 +68,19 @@ export const Registro = () => {
       "Tierra del Fuego",
       "Tucumán"
     ];
-    const fecha = new Date();
-    const fechaFormateada = moment.tz(fecha, 'America/Argentina/Buenos_Aires').format('YYYY-MM-DD HH:mm:ss.SSS');
+  const fecha = new Date();
+  const fechaFormateada = moment.tz(fecha, 'America/Argentina/Buenos_Aires').format('YYYY-MM-DD HH:mm:ss.SSS');
   
-    const navigate = useNavigate();
 
-    const handleTogglePassword = () => {
+ const handleTogglePassword = () => {
       setShowPassword(!showPassword);
       
     };
-    const handleTogglePassword2 = () => {
+ const handleTogglePassword2 = () => {
       setShowPassword2(!showPassword2);
     };
 
-    const handleRegister = async (e)=>{
+ const handleRegister = async (e)=>{
       e.preventDefault();
       // setFormData({
       //   ...formData,
@@ -186,14 +177,11 @@ catch(error)
 console.log(error);
 }
 
-
 AgregarCiudadanoDB(formData);
-  
-
         
-       }
+    }
 
-    const handleChange = (e,lon) => {
+const handleChange = (e,lon) => {
 
 if(e.target.type=="number")
 {
@@ -215,13 +203,10 @@ else{
     
 });
 
+}  
+    }
 
-
-}
-     
-       }
-
-    const AgregarCiudadanoDB= async (data) =>
+ const AgregarCiudadanoDB= async (data) =>
        {
        
            try{
@@ -242,11 +227,10 @@ else{
            {
            console.log(error);
            }
-       }
-
+    }
 
    
-  return (
+return (
     <>
    
 <header>
@@ -304,7 +288,7 @@ else{
     <Form.Label> <strong>Email </strong> </Form.Label>
     <Form.Control
       type="email"
-      placeholder="name@example.com"
+      placeholder="nombre@ejemplo.com"
       name="email_ciudadano"
       onChange={handleChange}
       maxLength={70}
@@ -444,20 +428,14 @@ else{
  onChange={handleChange}
  value={formData.localidad}
  name="localidad"
+ placeholder='San Miguel de Tucumán'
  
  required
  
  />
- 
-
- 
-
- 
- 
    
-      
    
-  </Form.Group>
+</Form.Group>
 </Col>
 
       </Row>
@@ -495,14 +473,14 @@ else{
     </Container>
 
 <footer
- className='footerregistro d-flex flex-row justify-content-between'
+ className='footerregistro d-flex flex-row  justify-content-center justify-content-sm-between'
  >
-  <div >
+  <div  className='col-xs-12 text-center' >
 
-  <img src={logo3} alt="Logo 1" className='logo3 p-2' />
+  <img src={logo3} alt="Logo 1"className='logo3 mt-3 ms-2 mx-auto mb-2' />
   </div>
-  <div className='mt-3 me-3 ms-2'>
-    <p className='text-light'>Desarrollado por: Dirección de innovación tecnológica -Todos los derechos reservados</p>
+  <div className='mt-4 me-3 d-none d-sm-block'>
+    <p className='text-light'>Desarrollado por: Dirección de innovación tecnológica</p>
   </div>
 
 </footer>
