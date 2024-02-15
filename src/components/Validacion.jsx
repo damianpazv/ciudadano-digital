@@ -16,7 +16,7 @@ export const Validacion = (props) => {
    
   
   const { data, cerrarModal, setModalAbierto } = props;
-    const[datos,setDatos]= useState({email_ciudadano:data.email_ciudadano,
+    const[datos,setDatos]= useState({email_persona:data.email_persona,
     codigo_verif:undefined});
     const navigate = useNavigate();
     

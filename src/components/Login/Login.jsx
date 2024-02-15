@@ -27,8 +27,8 @@ export const Login = () => {
 
   const[formData, setFormData]= useState({
       
-    email_ciudadano:"",
-    clave_ciudadano:"",
+    email_persona:"",
+    clave:"",
     
   })
 
@@ -117,11 +117,11 @@ const handleLogin = async (e) =>{
     <Form.Control
       type="email"
       placeholder="nombre@ejemplo.com"
-      name="email_ciudadano"
+      name="email_persona"
       onChange={handleChange}
       maxLength={70}
       required
-      value={formData.email_ciudadano}
+      value={formData.email_persona}
     />
   </Form.Group>
 
@@ -130,9 +130,9 @@ const handleLogin = async (e) =>{
     <Form.Control
      type={showPassword ? 'text' : 'password'}
       placeholder='Escriba su clave'
-      name="clave_ciudadano"
+      name="clave"
       onChange={handleChange}
-      value={formData.clave_ciudadano}
+      value={formData.clave}
       // minLength={15}
       // maxLength={15}
       required

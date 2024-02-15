@@ -11,7 +11,8 @@ import { Validacion } from './Validacion';
 import cdigitalApi from '../api/cdigitalAPI';
 import { useEffect } from 'react';
 import moment from 'moment-timezone';
-
+import DatePicker from 'react-datepicker';
+import 'react-datepicker/dist/react-datepicker.css';
 
 export const Registro = () => {
    
@@ -26,17 +27,20 @@ export const Registro = () => {
     
   const[formData, setFormData]= useState({
       
-      dni_ciudadano:"",
-      nombre_ciudadano:"",
-      email_ciudadano:"",
-      clave_ciudadano:"",
-      telefono_ciudadano:"",
-      celular_ciudadano:"",
-      domicilio:"",
-      provincia:"",
-      localidad:"",
+      documento_persona:"",
+      nombre_persona:"",
+      apellido_persona:"",
+      email_persona:"",
+      clave:"",
+      telefono_persona:"",
+      celular_persona:"",
+      domicilio_persona:"",
+      id_provincia:"",
+      localidad_persona:"",
+      id_pais:"",
+      fecha_nacimiento_persona:"",
+      id_genero:"",
       validado:false,
-      fecha_carga:"",
       habilita:false
       
     })
@@ -68,8 +72,39 @@ export const Registro = () => {
       "Tierra del Fuego",
       "Tucumán"
     ];
-  const fecha = new Date();
-  const fechaFormateada = moment.tz(fecha, 'America/Argentina/Buenos_Aires').format('YYYY-MM-DD HH:mm:ss.SSS');
+  const paisesAmerica = [
+      "Estados Unidos",
+      "Canadá",
+      "México",
+      "Argentina",
+      "Brasil",
+      "Colombia",
+      "Chile",
+      "Perú",
+      "Ecuador",
+      "Venezuela",
+      "Bolivia",
+      "Uruguay",
+      "Paraguay",
+      "Costa Rica",
+      "Panamá",
+      "Cuba",
+      "República Dominicana",
+      "Honduras",
+      "El Salvador",
+      "Nicaragua",
+      "Guatemala",
+      "Jamaica",
+      "Trinidad y Tobago",
+      "Haití",
+      "Puerto Rico",
+      "Guyana",
+      "Surinam",
+      "Guyana Francesa",
+      "Belice"
+    ];
+ 
+
   
 
  const handleTogglePassword = () => {
@@ -82,18 +117,13 @@ export const Registro = () => {
 
  const handleRegister = async (e)=>{
       e.preventDefault();
-      // setFormData({
-      //   ...formData,
-      
-        
-      //   fecha_carga: new Date().toLocaleString(),
-      // });
+  console.log(formData);
 
       
         // ! Verificar Email
         const patronEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-        if(!patronEmail.test(formData.email_ciudadano)){
+ if(!patronEmail.test(formData.email_persona)){
             return Swal.fire({
                 icon: 'error',
                 title: '¡Ups!',
@@ -101,7 +131,7 @@ export const Registro = () => {
               })
         }
         // ! Verificar que las contraseñas sean iguales
-        if( formData.clave_ciudadano !== confirmarContraseña){
+if( formData.clave !== confirmarContraseña){
             return Swal.fire({
                 icon: 'error',
                 title: '¡Ups!',
@@ -109,15 +139,15 @@ export const Registro = () => {
               })
         }
 
-        if( formData.dni_ciudadano.length != 8){
+ if( formData.documento_persona.length > 8){
           return Swal.fire({
               icon: 'error',
               title: '¡Ups!',
-              text: 'El DNI debe tener 8 caracteres',                
+              text: 'El DNI debe tener 8 digitos',                
             })
       }
 
-      if( formData.celular_ciudadano.length != 10){
+ if( formData.celular_persona.length != 10){
         return Swal.fire({
             icon: 'error',
             title: '¡Ups!',
@@ -125,32 +155,26 @@ export const Registro = () => {
           })
     }
 
-  //   if( formData.telefono_ciudadano.length != 7){
-  //     return Swal.fire({
-  //         icon: 'error',
-  //         title: '¡Ups!',
-  //         text: 'El nro de teléfono debe tener 7 caracteres sin guiones ejemplo: 4223456',                
-  //       })
-  // }
 
-  if( formData.provincia == 0){
+  if( formData.id_provincia == 0){
     return Swal.fire({
         icon: 'error',
         title: '¡Ups!',
         text: 'Debe seleccionar una provincia',                
       })
 }
-if( formData.localidad == 0){
+if( formData.id_pais == 0){
   return Swal.fire({
       icon: 'error',
       title: '¡Ups!',
-      text: 'Debe seleccionar una localidad',                
+      text: 'Debe seleccionar un pais',                
     })
 }
 
+
 try{
-  const resp=await cdigitalApi.get(`/api/usuarios/dni/${formData.dni_ciudadano} `);
-  const resp2=await cdigitalApi.get(`/api/usuarios/email/${formData.email_ciudadano} `);
+  const resp=await cdigitalApi.get(`/api/usuarios/dni/${formData.documento_persona} `);
+  const resp2=await cdigitalApi.get(`/api/usuarios/email/${formData.email_persona} `);
 
 
  if(resp.data.ciudadano){
@@ -177,34 +201,33 @@ catch(error)
 console.log(error);
 }
 
-AgregarCiudadanoDB(formData);
+// AgregarCiudadanoDB(formData);
         
     }
 
-const handleChange = (e,lon) => {
+    const handleChange = (e, lon) => {
+      let value = e.target.value.trim(); // Eliminar espacios en blanco alrededor del valor
+      
+      if (e.target.name === "id_provincia" || e.target.name === "id_pais" || e.target.name === "documento_persona" ||e.target.name==="id_genero") {
+        value = value !== "" ? parseInt(value.slice(0, lon), 10) : ""; // Convertir a número si no está vacío
+      } else if (e.target.type === "number") {
+        value = value.slice(0, lon); // Limitar la longitud si es necesario
+      }
+      
+      setFormData({
+        ...formData,
+        [e.target.name]: value,
+      });
+    };
 
-if(e.target.type=="number")
-{
-  setFormData({
-    ...formData,
-    [e.target.name]: e.target.value.slice(0,lon),
-     fecha_carga: fechaFormateada,
-    
-});
-// setFormData({
-//   ...formData,
-//   fecha_carga: new Date().toLocaleString(),
-// });
-}
-else{
-  setFormData({
-    ...formData,
-    [e.target.name]: e.target.value,
-    
-});
-
-}  
+    const handleChangeFecha=(date)=>{
+      setFormData({
+        ...formData,
+        fecha_nacimiento_persona: date,
+      });
     }
+    
+    
 
  const AgregarCiudadanoDB= async (data) =>
        {
@@ -261,39 +284,68 @@ return (
       type="number"
       placeholder='16234568'
       onChange={(e)=>handleChange(e,8)}
-      value={formData.dni_ciudadano}
-      name="dni_ciudadano"
+      value={formData.documento_persona}
+      name="documento_persona"
       required
       
     />
- 
-
   </Form.Group>
+
+
 <Form.Group className="mb-3 " controlId="nombre">
-    <Form.Label> <strong>Nombre y Apellido</strong> </Form.Label>
+    <Form.Label> <strong>Nombre </strong> </Form.Label>
     <Form.Control
       type="text"
       placeholder="Juan Perez"
-      name='nombre_ciudadano'
+      name='nombre_persona'
       onChange={handleChange}
       maxLength={50}
-      minLength={5}
+      minLength={2}
       required
-      value={formData.nombre_ciudadano}
+      value={formData.nombre_persona}
     />
      
   </Form.Group>
+  <Form.Group className="mb-3 " controlId="apellido">
+    <Form.Label> <strong>Apellido</strong> </Form.Label>
+    <Form.Control
+      type="text"
+      placeholder="Juan Perez"
+      name='apellido_persona'
+      onChange={handleChange}
+      maxLength={50}
+      minLength={2}
+      required
+      value={formData.apellido_persona}
+    />
+     
+  </Form.Group>
+  <Form.Group className="mb-3" controlId="genero">
+  <Form.Label> <strong>Genero</strong> </Form.Label>
+  <Form.Select 
+    type="number"    
+    onChange={(e) => handleChange(e, 2)}
+    value={(formData.id_genero)} // Convirtiendo a número aquí
+    name="id_genero"
+    maxLength={2}
+    required
+  >
+    <option value={0}>Seleccione Genero</option>
+    <option value={1}>Masculino</option>
+    <option value={2}>Femenino</option>
+  </Form.Select>
+</Form.Group>
 
   <Form.Group className="mb-3" controlId="email">
     <Form.Label> <strong>Email </strong> </Form.Label>
     <Form.Control
       type="email"
       placeholder="nombre@ejemplo.com"
-      name="email_ciudadano"
+      name="email_persona"
       onChange={handleChange}
       maxLength={70}
       required
-      value={formData.email_ciudadano}
+      value={formData.email_persona}
     />
   </Form.Group>
 
@@ -302,9 +354,9 @@ return (
     <Form.Control
       type="number"
       placeholder="4223456"
-      name="telefono_ciudadano"
+      name="telefono_persona"
       onChange={(e)=>handleChange(e,7)}
-      value={formData.telefono_ciudadano}
+      value={formData.telefono_persona}
       
       
     />
@@ -315,9 +367,9 @@ return (
     <Form.Control
       type="number"
       placeholder="3813456789"
-      name="celular_ciudadano"
+      name="celular_persona"
       onChange={(e)=>handleChange(e,10)}
-      value={formData.celular_ciudadano}
+      value={formData.celular_persona}
       required
     />
   </Form.Group>
@@ -331,9 +383,9 @@ return (
     <Form.Control
      type={showPassword ? 'text' : 'password'}
       placeholder='Escriba una clave'
-      name="clave_ciudadano"
+      name="clave"
       onChange={handleChange}
-      value={formData.clave_ciudadano}
+      value={formData.clave}
       minLength={15}
       maxLength={15}
       required
@@ -389,35 +441,78 @@ return (
       type="text"
       placeholder='Mendoza 345'
       onChange={handleChange}
-      value={formData.domicilio}
-      name="domicilio"
+      value={formData.domicilio_persona}
+      name="domicilio_persona"
       maxLength={30}
       required
     />
   </Form.Group>
 
+  <Form.Group as={Row} className="mb-3" controlId="nacimiento">
+    <Form.Label> <strong> Fecha de nacimiento</strong></Form.Label>
+    <DatePicker
+          selected={formData.fecha_nacimiento_persona}
+          onChange={handleChangeFecha}
+          name="fecha_nacimiento_persona"
+          dateFormat="dd/MM/yyyy"
+          showYearDropdown
+          scrollableYearDropdown
+          yearDropdownItemNumber={50}
+          placeholderText="Selecciona una fecha"
+          className="form-control"
+          required
+        />
+  </Form.Group>
+
+
+
   <Form.Group className="mb-3" controlId="Provincia">
-    <Form.Label> <strong>Provincia</strong> </Form.Label>
+  <Form.Label> <strong>Provincia</strong> </Form.Label>
+  <Form.Select 
+    type="number"    
+    onChange={(e) => handleChange(e, 2)}
+    value={(formData.id_provincia)} // Convirtiendo a número aquí
+    name="id_provincia"
+    maxLength={2}
+    required
+  >
+    <option value={0}>Seleccione Provincia</option>
+    {provinciasArgentina.map((provincia, index) => (
+      <option key={index} value={index + 1}>
+        {provincia}
+      </option>
+    ))}
+  </Form.Select>
+</Form.Group>
+
+
+  <Form.Group className="mb-3" controlId="Pais">
+    <Form.Label> <strong>Pais</strong> </Form.Label>
     
  <Form.Select 
- type="text"    
- onChange={handleChange}
- value={formData.provincia}
- name="provincia"
+ type="number"    
+
+ onChange={(e)=>handleChange(e,2)}
+ value={formData.id_pais}
+ name="id_pais"
  maxLength={2}
  required
  
  >
-     <option value={0}>Seleccione Provincia</option>
-      {provinciasArgentina.map((provincia, index) => (
-        <option key={index} value={provincia}>
-          {provincia}
+     <option value={0}>Seleccione Pais</option>
+      {paisesAmerica.map((pais, index) => (
+        <option key={index} value={index+1}>
+          {pais}
         </option>
       ))}
       
       
     </Form.Select>
   </Form.Group>
+
+
+
+
 
   <Form.Group className="mb-3" controlId="Localidad">
     <Form.Label> <strong>Localidad</strong> </Form.Label>
@@ -426,8 +521,8 @@ return (
  
  type="text"    
  onChange={handleChange}
- value={formData.localidad}
- name="localidad"
+ value={formData.localidad_persona}
+ name="localidad_persona"
  placeholder='San Miguel de Tucumán'
  
  required
