@@ -117,7 +117,7 @@ export const Registro = () => {
 
  const handleRegister = async (e)=>{
       e.preventDefault();
-  console.log(formData);
+  
 
       
         // ! Verificar Email
@@ -200,8 +200,8 @@ catch(error)
 {
 console.log(error);
 }
-
-// AgregarCiudadanoDB(formData);
+console.log(formData);
+AgregarCiudadanoDB(formData);
         
     }
 
@@ -296,7 +296,7 @@ return (
     <Form.Label> <strong>Nombre </strong> </Form.Label>
     <Form.Control
       type="text"
-      placeholder="Juan Perez"
+      placeholder="Juan "
       name='nombre_persona'
       onChange={handleChange}
       maxLength={50}
@@ -310,7 +310,7 @@ return (
     <Form.Label> <strong>Apellido</strong> </Form.Label>
     <Form.Control
       type="text"
-      placeholder="Juan Perez"
+      placeholder="Perez"
       name='apellido_persona'
       onChange={handleChange}
       maxLength={50}
