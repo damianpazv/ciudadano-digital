@@ -28,12 +28,12 @@ export const Registro = () => {
   const[formData, setFormData]= useState({
       
       documento_persona:"",
+      id_tdocumento:"",
       nombre_persona:"",
       apellido_persona:"",
       email_persona:"",
       clave:"",
       telefono_persona:"",
-      celular_persona:"",
       domicilio_persona:"",
       id_provincia:"",
       localidad_persona:"",
@@ -46,65 +46,34 @@ export const Registro = () => {
     })
   const [showPassword, setShowPassword] = useState(false);
   const [showPassword2, setShowPassword2] = useState(false);
+  const [paises,setPaises] = useState([]);
+  const [provincias,setProvincias] = useState([]);
+  const [generos,setGeneros] = useState([]);
+  const [tipoDocumento,setTipoDocumento] = useState([]);
 
-  const provinciasArgentina = [
-      "Buenos Aires",
-      "Catamarca",
-      "Chaco",
-      "Chubut",
-      "Córdoba",
-      "Corrientes",
-      "Entre Ríos",
-      "Formosa",
-      "Jujuy",
-      "La Pampa",
-      "La Rioja",
-      "Mendoza",
-      "Misiones",
-      "Neuquén",
-      "Río Negro",
-      "Salta",
-      "San Juan",
-      "San Luis",
-      "Santa Cruz",
-      "Santa Fe",
-      "Santiago del Estero",
-      "Tierra del Fuego",
-      "Tucumán"
-    ];
-  const paisesAmerica = [
-      "Estados Unidos",
-      "Canadá",
-      "México",
-      "Argentina",
-      "Brasil",
-      "Colombia",
-      "Chile",
-      "Perú",
-      "Ecuador",
-      "Venezuela",
-      "Bolivia",
-      "Uruguay",
-      "Paraguay",
-      "Costa Rica",
-      "Panamá",
-      "Cuba",
-      "República Dominicana",
-      "Honduras",
-      "El Salvador",
-      "Nicaragua",
-      "Guatemala",
-      "Jamaica",
-      "Trinidad y Tobago",
-      "Haití",
-      "Puerto Rico",
-      "Guyana",
-      "Surinam",
-      "Guyana Francesa",
-      "Belice"
-    ];
+  useEffect(() => {
  
+    obtenerDatosDB();
+  }, []);
 
+
+ 
+    const obtenerDatosDB= async()=>{ try {
+      const paisesDB = await cdigitalApi.get("/api/paises");
+      const provinciasDB = await cdigitalApi.get("/api/provincias");
+      const generosDB = await cdigitalApi.get("/api/genero");
+      const documentoDB = await cdigitalApi.get("/api/documento");
+     
+      setPaises(paisesDB.data.ciudadanos);
+      setProvincias(provinciasDB.data.ciudadanos);
+      setGeneros(generosDB.data.ciudadanos);
+      setTipoDocumento(documentoDB.data.ciudadanos);
+      
+    } catch (error) {
+      console.log(error);
+      
+    }
+  }
   
 
  const handleTogglePassword = () => {
@@ -201,14 +170,14 @@ catch(error)
 console.log(error);
 }
 console.log(formData);
-AgregarCiudadanoDB(formData);
+ AgregarCiudadanoDB(formData);
         
     }
 
     const handleChange = (e, lon) => {
       let value = e.target.value.trim(); // Eliminar espacios en blanco alrededor del valor
       
-      if (e.target.name === "id_provincia" || e.target.name === "id_pais" || e.target.name === "documento_persona" ||e.target.name==="id_genero") {
+      if (e.target.name === "id_provincia" || e.target.name === "id_pais" || e.target.name === "documento_persona" ||e.target.name==="id_genero" || e.target.name=="id_tdocumento") {
         value = value !== "" ? parseInt(value.slice(0, lon), 10) : ""; // Convertir a número si no está vacío
       } else if (e.target.type === "number") {
         value = value.slice(0, lon); // Limitar la longitud si es necesario
@@ -278,18 +247,47 @@ return (
 
       <Row>
 <Col xs={12} md={6}>
+
+<Form.Group className="mb-3" controlId="tdocumento">
+  <Form.Label> <strong>Tipo de Documento</strong> </Form.Label>
+  <Form.Select
+     className='me-3'
+     onChange={(e) => handleChange(e, 2)}
+     value={formData.id_tdocumento}
+     name="id_tdocumento"
+     maxLength={2}
+     required
+   >
+     <option value={0}>SELECCIONE UN TIPO DE DOCUMENTO</option>
+     {tipoDocumento.map((tipo, index) => (
+       <option key={index} value={tipo.id_tdocumento}>
+         {tipo.nombre_tdocumento}
+       </option>
+     ))}
+   </Form.Select>
+</Form.Group>
+
+
+
 <Form.Group className="mb-3" controlId="dni">
-    <Form.Label> <strong>DNI</strong> </Form.Label>
+  <Form.Label className="col-sm-3"><strong>Nro. Documento</strong></Form.Label>
+  
+
     <Form.Control
+     
       type="number"
-      placeholder='16234568'
-      onChange={(e)=>handleChange(e,8)}
+      placeholder="16234568"
+      onChange={(e) => handleChange(e, 8)}
       value={formData.documento_persona}
       name="documento_persona"
       required
-      
     />
-  </Form.Group>
+
+  
+</Form.Group>
+
+
+
 
 
 <Form.Group className="mb-3 " controlId="nombre">
@@ -330,9 +328,13 @@ return (
     maxLength={2}
     required
   >
-    <option value={0}>Seleccione Genero</option>
-    <option value={1}>Masculino</option>
-    <option value={2}>Femenino</option>
+     <option value={0}>SELECCIONE GENERO</option>
+      {generos.map((genero, index) => (
+        <option key={index} value={genero.id_genero}>
+          {genero.nombre_genero}
+        </option>
+      ))}
+
   </Form.Select>
 </Form.Group>
 
@@ -349,18 +351,7 @@ return (
     />
   </Form.Group>
 
-  <Form.Group className="mb-3" controlId="telefono">
-    <Form.Label> <strong>Telefono</strong> </Form.Label>
-    <Form.Control
-      type="number"
-      placeholder="4223456"
-      name="telefono_persona"
-      onChange={(e)=>handleChange(e,7)}
-      value={formData.telefono_persona}
-      
-      
-    />
-  </Form.Group>
+
 
   <Form.Group className="mb-3" controlId="celular">
     <Form.Label> <strong>Celular</strong> </Form.Label>
@@ -369,7 +360,7 @@ return (
       placeholder="3813456789"
       name="celular_persona"
       onChange={(e)=>handleChange(e,10)}
-      value={formData.celular_persona}
+      value={formData.telefono_persona}
       required
     />
   </Form.Group>
@@ -476,12 +467,12 @@ return (
     maxLength={2}
     required
   >
-    <option value={0}>Seleccione Provincia</option>
-    {provinciasArgentina.map((provincia, index) => (
-      <option key={index} value={index + 1}>
-        {provincia}
-      </option>
-    ))}
+  <option value={0}>SELECCIONE PROVINCIA</option>
+      {provincias.map((provincia, index) => (
+        <option key={index} value={provincia.id_provincia}>
+          {provincia.nombre_provincia}
+        </option>
+      ))}
   </Form.Select>
 </Form.Group>
 
@@ -499,10 +490,10 @@ return (
  required
  
  >
-     <option value={0}>Seleccione Pais</option>
-      {paisesAmerica.map((pais, index) => (
-        <option key={index} value={index+1}>
-          {pais}
+     <option value={0}>SELECCIONE PAIS</option>
+      {paises.map((pais, index) => (
+        <option key={index} value={pais.id_pais}>
+          {pais.nombre_pais}
         </option>
       ))}
       
