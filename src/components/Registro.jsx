@@ -6,18 +6,19 @@ import logo from '../assets/logo1.png';
 import logo2 from '../assets/logo5.png';
 import logo3 from '../assets/logo4.png';
 import { FaEye, FaEyeSlash } from "react-icons/fa";
-import emailjs from '@emailjs/browser';
 import { Validacion } from './Validacion';
 import cdigitalApi from '../api/cdigitalAPI';
 import { useEffect } from 'react';
 import moment from 'moment-timezone';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
+import es from 'date-fns/locale/es';
+
 
 export const Registro = () => {
    
   const [confirmarContraseña, setConfirmarContraseña] = useState('');
-  const [codigo, setCodigo] = useState('');
+  
   const [modalAbierto, setModalAbierto] = useState(false);
   const abrirModal = () => {
       console.log("Abriendo modal...");
@@ -50,13 +51,14 @@ export const Registro = () => {
   const [provincias,setProvincias] = useState([]);
   const [generos,setGeneros] = useState([]);
   const [tipoDocumento,setTipoDocumento] = useState([]);
+  const [startDate, setStartDate] = useState(new Date());
 
   useEffect(() => {
  
     obtenerDatosDB();
   }, []);
 
-
+  moment.tz.setDefault('America/Buenos_Aires');
  
     const obtenerDatosDB= async()=>{ try {
       const paisesDB = await cdigitalApi.get("/api/paises");
@@ -87,7 +89,7 @@ export const Registro = () => {
  const handleRegister = async (e)=>{
       e.preventDefault();
   
-
+   
       
         // ! Verificar Email
         const patronEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -116,7 +118,7 @@ if( formData.clave !== confirmarContraseña){
             })
       }
 
- if( formData.celular_persona.length != 10){
+ if( formData.telefono_persona.length != 10){
         return Swal.fire({
             icon: 'error',
             title: '¡Ups!',
@@ -136,7 +138,22 @@ if( formData.id_pais == 0){
   return Swal.fire({
       icon: 'error',
       title: '¡Ups!',
-      text: 'Debe seleccionar un pais',                
+      text: 'Debe seleccionar un país',                
+    })
+}
+
+if( formData.id_genero == 0){
+  return Swal.fire({
+      icon: 'error',
+      title: '¡Ups!',
+      text: 'Debe seleccionar un género',                
+    })
+}
+if( formData.id_tdocumento == 0){
+  return Swal.fire({
+      icon: 'error',
+      title: '¡Ups!',
+      text: 'Debe seleccionar un tipo de documento',                
     })
 }
 
@@ -175,7 +192,7 @@ console.log(formData);
     }
 
     const handleChange = (e, lon) => {
-      let value = e.target.value.trim(); // Eliminar espacios en blanco alrededor del valor
+      let value = e.target.value; // Eliminar espacios en blanco alrededor del valor
       
       if (e.target.name === "id_provincia" || e.target.name === "id_pais" || e.target.name === "documento_persona" ||e.target.name==="id_genero" || e.target.name=="id_tdocumento") {
         value = value !== "" ? parseInt(value.slice(0, lon), 10) : ""; // Convertir a número si no está vacío
@@ -189,12 +206,28 @@ console.log(formData);
       });
     };
 
-    const handleChangeFecha=(date)=>{
+    const handleChangeFecha = (date) => {
+      
+  console.log(date)
+      const fechaAnalizada = moment(date);
+
+     
+      //const fechaFormateada = fechaAnalizada.subtract(1, 'days').format('YYYY-MM-DD');
+      const fechaFormateada = fechaAnalizada.format('YYYY-MM-DD');
+      console.log(fechaAnalizada)
+      console.log(fechaFormateada);
+      
+ 
       setFormData({
         ...formData,
-        fecha_nacimiento_persona: date,
+        fecha_nacimiento_persona: fechaFormateada,
       });
-    }
+
+
+
+
+    };
+    
     
     
 
@@ -202,7 +235,7 @@ console.log(formData);
        {
        
            try{
-               const resp=await cdigitalApi.post("/api/usuarios",data);
+               const resp=await cdigitalApi.post("/api/usuarios/registro",data);
                
                Swal.fire({
                 position: "center",
@@ -251,7 +284,7 @@ return (
 <Form.Group className="mb-3" controlId="tdocumento">
   <Form.Label> <strong>Tipo de Documento</strong> </Form.Label>
   <Form.Select
-     className='me-3'
+     
      onChange={(e) => handleChange(e, 2)}
      value={formData.id_tdocumento}
      name="id_tdocumento"
@@ -270,7 +303,7 @@ return (
 
 
 <Form.Group className="mb-3" controlId="dni">
-  <Form.Label className="col-sm-3"><strong>Nro. Documento</strong></Form.Label>
+  <Form.Label ><strong>Nro. Documento</strong></Form.Label>
   
 
     <Form.Control
@@ -358,7 +391,7 @@ return (
     <Form.Control
       type="number"
       placeholder="3813456789"
-      name="celular_persona"
+      name="telefono_persona"
       onChange={(e)=>handleChange(e,10)}
       value={formData.telefono_persona}
       required
@@ -442,16 +475,24 @@ return (
   <Form.Group as={Row} className="mb-3" controlId="nacimiento">
     <Form.Label> <strong> Fecha de nacimiento</strong></Form.Label>
     <DatePicker
-          selected={formData.fecha_nacimiento_persona}
-          onChange={handleChangeFecha}
-          name="fecha_nacimiento_persona"
-          dateFormat="dd/MM/yyyy"
+         selected={formData.fecha_nacimiento_persona}    
+      onChange={(date) =>{   setFormData({
+        ...formData,
+        fecha_nacimiento_persona: date,
+      });} 
+      
+      }
+          
+          dateFormat="yyyy-MM-dd"
           showYearDropdown
-          scrollableYearDropdown
+         scrollableYearDropdown
           yearDropdownItemNumber={50}
           placeholderText="Selecciona una fecha"
           className="form-control"
           required
+          locale={es}
+          timeZone="America/Buenos_Aires"
+          
         />
   </Form.Group>
 

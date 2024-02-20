@@ -101,7 +101,7 @@ export const Validacion = (props) => {
 
 
  <Modal.Header closeButton >
-          <Modal.Title>Le enviamos un email de validación a <strong>{data.email_ciudadano}</strong>  con un código de 4 dígitos</Modal.Title>
+          <Modal.Title>Le enviamos un email de validación a <strong>{data.email_persona}</strong>  con un código de 4 dígitos</Modal.Title>
         </Modal.Header>
 
 
