@@ -50,9 +50,12 @@ export const Validacion = (props) => {
                   timer: 2000
               });
   
+              // setTimeout(() => {
+              //     navigate("/login");
+              // }, 2500);
               setTimeout(() => {
-                  navigate("/login");
-              }, 2500);
+                window.location.href = "http://172.16.8.209/";
+            }, 2500);
           } else {
               Swal.fire({
                 icon: 'error',
@@ -97,10 +100,10 @@ export const Validacion = (props) => {
     <>
 
        
- <Modal  show={true} onHide={cerrarModal}>
+ <Modal  show={true} onHide={cerrarModal} backdrop="static" keyboard={false}>
 
 
- <Modal.Header closeButton >
+ <Modal.Header  >
           <Modal.Title>Le enviamos un email de validación a <strong>{data.email_persona}</strong>  con un código de 4 dígitos</Modal.Title>
         </Modal.Header>
 

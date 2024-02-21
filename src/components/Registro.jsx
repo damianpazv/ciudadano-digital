@@ -13,7 +13,8 @@ import moment from 'moment-timezone';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import es from 'date-fns/locale/es';
-
+import Skeleton from 'react-loading-skeleton'
+import 'react-loading-skeleton/dist/skeleton.css'
 
 export const Registro = () => {
    
@@ -188,6 +189,24 @@ console.log(error);
 }
 console.log(formData);
  AgregarCiudadanoDB(formData);
+//  setFormData({
+//   documento_persona: "",
+//   id_tdocumento: "",
+//   nombre_persona: "",
+//   apellido_persona: "",
+//   email_persona: "",
+//   clave: "",
+//   telefono_persona: "",
+//   domicilio_persona: "",
+//   id_provincia: "",
+//   localidad_persona: "",
+//   id_pais: "",
+//   fecha_nacimiento_persona: "",
+//   id_genero: "",
+//   validado: false,
+//   habilita: false,
+// });
+
         
     }
 
@@ -275,12 +294,15 @@ return (
 
       <Row className='justify-content-center ' >
      <Col xs={12} md={8}  className='mt-2 pt-3 main mb-3 pb-3'>
-     
-     <Form  onSubmit={handleRegister} className='m-1 p-3 '>
+
+   
+  <Form  onSubmit={handleRegister} className='m-1 p-3 '>
 
       <Row>
 <Col xs={12} md={6}>
+{paises.length==0 ||provincias.length==0 || generos.length==0 || tipoDocumento.length==0   ? ( <Skeleton count={7} height={37} className='esqueleto'/>) : (
 
+<div>
 <Form.Group className="mb-3" controlId="tdocumento">
   <Form.Label> <strong>Tipo de Documento</strong> </Form.Label>
   <Form.Select
@@ -300,8 +322,6 @@ return (
    </Form.Select>
 </Form.Group>
 
-
-
 <Form.Group className="mb-3" controlId="dni">
   <Form.Label ><strong>Nro. Documento</strong></Form.Label>
   
@@ -319,10 +339,6 @@ return (
   
 </Form.Group>
 
-
-
-
-
 <Form.Group className="mb-3 " controlId="nombre">
     <Form.Label> <strong>Nombre </strong> </Form.Label>
     <Form.Control
@@ -337,6 +353,7 @@ return (
     />
      
   </Form.Group>
+
   <Form.Group className="mb-3 " controlId="apellido">
     <Form.Label> <strong>Apellido</strong> </Form.Label>
     <Form.Control
@@ -351,6 +368,7 @@ return (
     />
      
   </Form.Group>
+
   <Form.Group className="mb-3" controlId="genero">
   <Form.Label> <strong>Genero</strong> </Form.Label>
   <Form.Select 
@@ -384,8 +402,6 @@ return (
     />
   </Form.Group>
 
-
-
   <Form.Group className="mb-3" controlId="celular">
     <Form.Label> <strong>Celular</strong> </Form.Label>
     <Form.Control
@@ -397,11 +413,17 @@ return (
       required
     />
   </Form.Group>
- 
+</div>
+
+
+)
+}
 
 </Col>
 
 <Col xs={12} md={6}> 
+{paises.length==0 ||provincias.length==0 || generos.length==0 || tipoDocumento.length==0  ? ( <Skeleton count={7} height={37} className='esqueleto'/>) :(
+<div>
 <Form.Group className=" d-flex flex-column" controlId="clave">
   <Form.Label> <strong>Clave</strong> </Form.Label>
     <Form.Control
@@ -410,7 +432,7 @@ return (
       name="clave"
       onChange={handleChange}
       value={formData.clave}
-      minLength={15}
+      minLength={8} 
       maxLength={15}
       required
     />
@@ -458,7 +480,6 @@ return (
   </div>
   </Form.Group>
 
-
   <Form.Group className="mb-3" controlId="domicilio">
     <Form.Label> <strong> Domicilio</strong></Form.Label>
     <Form.Control
@@ -496,8 +517,6 @@ return (
         />
   </Form.Group>
 
-
-
   <Form.Group className="mb-3" controlId="Provincia">
   <Form.Label> <strong>Provincia</strong> </Form.Label>
   <Form.Select 
@@ -517,8 +536,7 @@ return (
   </Form.Select>
 </Form.Group>
 
-
-  <Form.Group className="mb-3" controlId="Pais">
+<Form.Group className="mb-3" controlId="Pais">
     <Form.Label> <strong>Pais</strong> </Form.Label>
     
  <Form.Select 
@@ -543,9 +561,6 @@ return (
   </Form.Group>
 
 
-
-
-
   <Form.Group className="mb-3" controlId="Localidad">
     <Form.Label> <strong>Localidad</strong> </Form.Label>
     
@@ -563,6 +578,9 @@ return (
    
    
 </Form.Group>
+</div>
+)
+      }
 </Col>
 
       </Row>
@@ -591,13 +609,15 @@ return (
 
  
   </Form>
-      
+
+   
      </Col>
          
       </Row>
 
 
     </Container>
+   
 
 <footer
  className='footerregistro d-flex flex-row  justify-content-center justify-content-sm-between'
