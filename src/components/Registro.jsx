@@ -62,10 +62,10 @@ export const Registro = () => {
   moment.tz.setDefault('America/Buenos_Aires');
  
     const obtenerDatosDB= async()=>{ try {
-      const paisesDB = await cdigitalApi.get("/api/paises");
-      const provinciasDB = await cdigitalApi.get("/api/provincias");
-      const generosDB = await cdigitalApi.get("/api/genero");
-      const documentoDB = await cdigitalApi.get("/api/documento");
+      const paisesDB = await cdigitalApi.get("/ciudadanoDigital/paises");
+      const provinciasDB = await cdigitalApi.get("/ciudadanoDigital/provincias");
+      const generosDB = await cdigitalApi.get("/ciudadanoDigital/genero");
+      const documentoDB = await cdigitalApi.get("/ciudadanoDigital/documento");
      
       setPaises(paisesDB.data.ciudadanos);
       setProvincias(provinciasDB.data.ciudadanos);
@@ -160,8 +160,8 @@ if( formData.id_tdocumento == 0){
 
 
 try{
-  const resp=await cdigitalApi.get(`/api/usuarios/dni/${formData.documento_persona} `);
-  const resp2=await cdigitalApi.get(`/api/usuarios/email/${formData.email_persona} `);
+  const resp=await cdigitalApi.get(`/usuarios/dni/${formData.documento_persona} `);
+  const resp2=await cdigitalApi.get(`/usuarios/email/${formData.email_persona} `);
 
 
  if(resp.data.ciudadano){
@@ -254,7 +254,7 @@ console.log(formData);
        {
        
            try{
-               const resp=await cdigitalApi.post("/api/usuarios/registro",data);
+               const resp=await cdigitalApi.post("/usuarios/registro",data);
                
                Swal.fire({
                 position: "center",
