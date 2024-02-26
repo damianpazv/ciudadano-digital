@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import '../css/registro.css';
 import Swal from 'sweetalert2';
-import { Button, Col, Container, Form, FormControl, Row } from 'react-bootstrap';
+import {  Col, Container, Form, Row } from 'react-bootstrap';
 import logo from '../assets/logo1.png';
 import logo2 from '../assets/logo5.png';
 import logo3 from '../assets/logo4.png';
@@ -15,6 +15,8 @@ import 'react-datepicker/dist/react-datepicker.css';
 import es from 'date-fns/locale/es';
 import Skeleton from 'react-loading-skeleton'
 import 'react-loading-skeleton/dist/skeleton.css'
+import { Button, FormControl } from '@mui/material';
+
 
 export const Registro = () => {
    
@@ -111,6 +113,23 @@ if( formData.clave !== confirmarContraseña){
               })
         }
 
+        if( formData.clave.length < 5){
+          return Swal.fire({
+              icon: 'error',
+              title: '¡Ups!',
+              text: 'El DNI debe tener 5 caracteres como mínimo',                
+            })
+      }
+
+      if( formData.clave.length > 30){
+        return Swal.fire({
+            icon: 'error',
+            title: '¡Ups!',
+            text: 'El DNI debe tener 30 caracteres como máximo',                
+          })
+    }
+
+
  if( formData.documento_persona.length > 8){
           return Swal.fire({
               icon: 'error',
@@ -118,6 +137,24 @@ if( formData.clave !== confirmarContraseña){
               text: 'El DNI debe tener 8 digitos',                
             })
       }
+
+      if( formData.telefono_persona <0){
+        return Swal.fire({
+            icon: 'error',
+            title: '¡Ups!',
+            text: 'El nro de celular no puede ser negativo',                
+          })
+    }
+
+    if( formData.documento_persona <0){
+      return Swal.fire({
+          icon: 'error',
+          title: '¡Ups!',
+          text: 'El nro de documento no puede ser negativo',                
+        })
+  }
+
+
 
  if( formData.telefono_persona.length != 10){
         return Swal.fire({
@@ -312,6 +349,8 @@ return (
      name="id_tdocumento"
      maxLength={2}
      required
+     className='input'
+     
    >
      <option value={0}>SELECCIONE UN TIPO DE DOCUMENTO</option>
      {tipoDocumento.map((tipo, index) => (
@@ -329,27 +368,30 @@ return (
     <Form.Control
      
       type="number"
-      placeholder="16234568"
+      placeholder="Ej: 16234568"
       onChange={(e) => handleChange(e, 8)}
       value={formData.documento_persona}
       name="documento_persona"
       required
+      className="custom-input-number input" 
+      autoFocus
     />
 
   
 </Form.Group>
 
-<Form.Group className="mb-3 " controlId="nombre">
+<Form.Group className="mb-3" controlId="nombre">
     <Form.Label> <strong>Nombre </strong> </Form.Label>
     <Form.Control
       type="text"
-      placeholder="Juan "
+      placeholder="Ej: Juan "
       name='nombre_persona'
       onChange={handleChange}
       maxLength={50}
       minLength={2}
       required
       value={formData.nombre_persona}
+      className='input'
     />
      
   </Form.Group>
@@ -358,13 +400,14 @@ return (
     <Form.Label> <strong>Apellido</strong> </Form.Label>
     <Form.Control
       type="text"
-      placeholder="Perez"
+      placeholder="Ej: Perez"
       name='apellido_persona'
       onChange={handleChange}
       maxLength={50}
       minLength={2}
       required
       value={formData.apellido_persona}
+      className='input'
     />
      
   </Form.Group>
@@ -378,6 +421,7 @@ return (
     name="id_genero"
     maxLength={2}
     required
+    className='input'
   >
      <option value={0}>SELECCIONE GENERO</option>
       {generos.map((genero, index) => (
@@ -393,12 +437,13 @@ return (
     <Form.Label> <strong>Email </strong> </Form.Label>
     <Form.Control
       type="email"
-      placeholder="nombre@ejemplo.com"
+      placeholder="Ej: juan@ejemplo.com"
       name="email_persona"
       onChange={handleChange}
       maxLength={70}
       required
       value={formData.email_persona}
+      className='input'
     />
   </Form.Group>
 
@@ -406,11 +451,12 @@ return (
     <Form.Label> <strong>Celular</strong> </Form.Label>
     <Form.Control
       type="number"
-      placeholder="3813456789"
+      placeholder="Ej: 3813456789"
       name="telefono_persona"
       onChange={(e)=>handleChange(e,10)}
       value={formData.telefono_persona}
       required
+      className="custom-input-number input" 
     />
   </Form.Group>
 </div>
@@ -428,13 +474,14 @@ return (
   <Form.Label> <strong>Clave</strong> </Form.Label>
     <Form.Control
      type={showPassword ? 'text' : 'password'}
-      placeholder='Escriba una clave'
+      placeholder='Escriba una clave '
       name="clave"
       onChange={handleChange}
       value={formData.clave}
-      minLength={8} 
-      maxLength={15}
+      minLength={5} 
+      maxLength={30}
       required
+      className='input'
     />
   <div className="d-flex justify-content-end">
   {showPassword ? (
@@ -459,9 +506,10 @@ return (
       type={showPassword2 ? 'text' : 'password'}
       placeholder='Repetir clave'
       onChange={(e) => setConfirmarContraseña(e.target.value)}
-      minLength={15}
-      maxLength={15}
+      minLength={5} 
+      maxLength={30}
       required
+      className='input'
     />
      <div className="d-flex justify-content-end">
   {showPassword2 ? (
@@ -484,12 +532,13 @@ return (
     <Form.Label> <strong> Domicilio</strong></Form.Label>
     <Form.Control
       type="text"
-      placeholder='Mendoza 345'
+      placeholder='Ej: Mendoza 345'
       onChange={handleChange}
       value={formData.domicilio_persona}
       name="domicilio_persona"
-      maxLength={30}
+      maxLength={120}
       required
+      className='input'
     />
   </Form.Group>
 
@@ -509,10 +558,11 @@ return (
          scrollableYearDropdown
           yearDropdownItemNumber={50}
           placeholderText="Selecciona una fecha"
-          className="form-control"
+          className="form-control input"
           required
           locale={es}
           timeZone="America/Buenos_Aires"
+          
           
         />
   </Form.Group>
@@ -526,6 +576,7 @@ return (
     name="id_provincia"
     maxLength={2}
     required
+    className='input'
   >
   <option value={0}>SELECCIONE PROVINCIA</option>
       {provincias.map((provincia, index) => (
@@ -547,7 +598,7 @@ return (
  name="id_pais"
  maxLength={2}
  required
- 
+ className='input'
  >
      <option value={0}>SELECCIONE PAIS</option>
       {paises.map((pais, index) => (
@@ -570,9 +621,10 @@ return (
  onChange={handleChange}
  value={formData.localidad_persona}
  name="localidad_persona"
- placeholder='San Miguel de Tucumán'
- 
+ placeholder='Ej: San Miguel de Tucumán'
+ maxLength={60}
  required
+ className='input'
  
  />
    
@@ -588,18 +640,22 @@ return (
 <Row>
 <Col className='text-center mt-2'>
 <div className='className="d-grid gap-2"'>
-  <Button size='lg' variant="primary" type="submit" className="w-50">
+  <Button size='lg'variant="contained" type="submit" className="w-50">
  Enviar
 </Button>
   </div>
 
 </Col>
-<div className=" mt-4">
+<div className=" mt-4 ">
         <Form.Check
           type="checkbox"
           id="default-checkbox"
           label="Acepto los términos y condiciones"
           required
+          
+          bsPrefix="custom-checkbox" 
+         
+          
         />
         
       </div>
@@ -627,7 +683,7 @@ return (
   <img src={logo3} alt="Logo 1"className='logo3 mt-3 ms-2 mx-auto mb-2' />
   </div>
   <div className='mt-4 me-3 d-none d-sm-block'>
-    <p className='text-light'>Desarrollado por: Dirección de innovación tecnológica</p>
+    <p className='text-light'>Desarrollado por: Dirección de Innovación Tecnológica</p>
   </div>
 
 </footer>
