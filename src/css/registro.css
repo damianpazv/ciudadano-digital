@@ -82,3 +82,8 @@ body{
   border: 2px solid gray !important; 
   margin-right: 0.5rem; 
 }
+/* Agrega margen al icono del DatePicker */
+.react-datepicker-wrapper .react-datepicker__input-container .react-datepicker__input-container input[type="text"] + .react-datepicker-popper .react-datepicker__calendar-container .react-datepicker__header .react-datepicker__navigation--previous,
+.react-datepicker-wrapper .react-datepicker__input-container .react-datepicker__input-container input[type="text"] + .react-datepicker-popper .react-datepicker__calendar-container .react-datepicker__header .react-datepicker__navigation--next {
+  margin: 0 10px; /* Ajusta el margen según sea necesario */
+}

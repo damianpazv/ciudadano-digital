@@ -5,7 +5,7 @@ import {  Col, Container, Form, Row } from 'react-bootstrap';
 import logo from '../assets/logo1.png';
 import logo2 from '../assets/logo5.png';
 import logo3 from '../assets/logo4.png';
-import { FaEye, FaEyeSlash } from "react-icons/fa";
+import { FaEye, FaEyeSlash,FaCalendar } from "react-icons/fa";
 import { Validacion } from './Validacion';
 import cdigitalApi from '../api/cdigitalAPI';
 import { useEffect } from 'react';
@@ -16,6 +16,7 @@ import es from 'date-fns/locale/es';
 import Skeleton from 'react-loading-skeleton'
 import 'react-loading-skeleton/dist/skeleton.css'
 import { Button, FormControl } from '@mui/material';
+import { faCalendarDay } from '@fortawesome/free-solid-svg-icons';
 
 
 export const Registro = () => {
@@ -62,6 +63,7 @@ export const Registro = () => {
   }, []);
 
   moment.tz.setDefault('America/Buenos_Aires');
+  const maxDate = new Date();
  
     const obtenerDatosDB= async()=>{ try {
       const paisesDB = await cdigitalApi.get("/ciudadanoDigital/paises");
@@ -134,7 +136,7 @@ if( formData.clave !== confirmarContraseña){
           return Swal.fire({
               icon: 'error',
               title: '¡Ups!',
-              text: 'El DNI debe tener 8 digitos',                
+              text: 'El DNI no puede tener mas de 8 dígitos',                
             })
       }
 
@@ -160,7 +162,7 @@ if( formData.clave !== confirmarContraseña){
         return Swal.fire({
             icon: 'error',
             title: '¡Ups!',
-            text: 'El nro de celular debe tener 10 caracteres sin guiones ejemplo: 3814123456',                
+            text: 'El nro de celular debe tener 10 dígitos sin guiones ejemplo: 3814123456',                
           })
     }
 
@@ -553,15 +555,19 @@ return (
       
       }
           
+         
           dateFormat="yyyy-MM-dd"
           showYearDropdown
          scrollableYearDropdown
-          yearDropdownItemNumber={50}
+          yearDropdownItemNumber={100}
           placeholderText="Selecciona una fecha"
-          className="form-control input"
+          className="form-control input "
           required
           locale={es}
           timeZone="America/Buenos_Aires"
+          maxDate={maxDate}
+      
+          
           
           
         />
